@@ -25,9 +25,24 @@ interface Section {
   content: React.ReactNode;
 }
 
-export default function HelpGuide() {
-  const [isOpen, setIsOpen] = useState(false);
+interface HelpGuideProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+  showTrigger?: boolean;
+}
+
+export default function HelpGuide({ isOpen: externalIsOpen, onClose, showTrigger = false }: HelpGuideProps) {
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('overview');
+  
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
+  const handleClose = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      setInternalIsOpen(false);
+    }
+  };
 
   const sections: Section[] = [
     {
@@ -479,14 +494,16 @@ export default function HelpGuide() {
 
   return (
     <>
-      {/* Help Button */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-onto-600 hover:bg-onto-500 text-white shadow-lg shadow-onto-600/30 flex items-center justify-center transition-all hover:scale-105"
-        title="使用帮助"
-      >
-        <QuestionMarkCircleIcon className="w-6 h-6" />
-      </button>
+      {/* Help Button - 仅在 showTrigger 为 true 时显示 */}
+      {showTrigger && (
+        <button
+          onClick={() => setInternalIsOpen(true)}
+          className="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-onto-600 hover:bg-onto-500 text-white shadow-lg shadow-onto-600/30 flex items-center justify-center transition-all hover:scale-105"
+          title="使用帮助"
+        >
+          <QuestionMarkCircleIcon className="w-6 h-6" />
+        </button>
+      )}
 
       {/* Help Modal */}
       {isOpen && (
@@ -494,7 +511,7 @@ export default function HelpGuide() {
           {/* Backdrop */}
           <div 
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            onClick={() => setIsOpen(false)}
+            onClick={handleClose}
           />
           
           {/* Modal */}
@@ -547,7 +564,7 @@ export default function HelpGuide() {
                   })()}
                 </div>
                 <button
-                  onClick={() => setIsOpen(false)}
+                  onClick={handleClose}
                   className="p-2 text-surface-400 hover:text-surface-200 hover:bg-surface-700 rounded-lg transition-colors"
                 >
                   <XMarkIcon className="w-5 h-5" />

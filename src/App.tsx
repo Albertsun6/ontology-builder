@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ReactFlowProvider } from '@xyflow/react';
 import Canvas from './components/Canvas';
 import Header from './components/Header';
@@ -7,8 +8,13 @@ import ActionList from './components/ActionList';
 import HelpGuide from './components/HelpGuide';
 import { ChatlogViewer } from './components/ChatlogViewer';
 import { GraphDatabaseView } from './components/GraphDatabaseView';
+import { FloatingMenu } from './components/FloatingMenu';
 
 function App() {
+  const [showHelp, setShowHelp] = useState(false);
+  const [showChatlog, setShowChatlog] = useState(false);
+  const [showGraphDB, setShowGraphDB] = useState(false);
+
   return (
     <ReactFlowProvider>
       <div className="h-screen w-screen overflow-hidden bg-surface-950">
@@ -19,9 +25,27 @@ function App() {
         <Toolbar />
         <Panel />
         <ActionList />
-        <HelpGuide />
-        <ChatlogViewer />
-        <GraphDatabaseView />
+        
+        {/* 悬浮菜单 */}
+        <FloatingMenu
+          onOpenHelp={() => setShowHelp(true)}
+          onOpenChatlog={() => setShowChatlog(true)}
+          onOpenGraphDB={() => setShowGraphDB(true)}
+        />
+        
+        {/* 各面板 - 由 FloatingMenu 控制 */}
+        <HelpGuide 
+          isOpen={showHelp} 
+          onClose={() => setShowHelp(false)} 
+        />
+        <ChatlogViewer 
+          isOpen={showChatlog} 
+          onClose={() => setShowChatlog(false)} 
+        />
+        <GraphDatabaseView 
+          isOpen={showGraphDB} 
+          onClose={() => setShowGraphDB(false)} 
+        />
       </div>
     </ReactFlowProvider>
   );

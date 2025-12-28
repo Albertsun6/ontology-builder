@@ -9,6 +9,7 @@ export { default as ActionList } from './ActionList';
 export { default as HelpGuide } from './HelpGuide';
 export { ChatlogViewer } from './ChatlogViewer';
 export { GraphDatabaseView } from './GraphDatabaseView';
+export { FloatingMenu } from './FloatingMenu';
 
 // Editor Components
 export { default as PropertyEditor } from './PropertyEditor';

@@ -323,25 +323,64 @@ const CHATLOG_CONTENT = `# 对话记录
 **状态标签：** ✅完成
 
 ---
+
+## 统一悬浮菜单
+
+**时间戳：** 2025-12-29 04:45
+
+**对话标题：** 将帮助、对话记录、图数据库按钮合并为菜单
+
+**用户需求：**
+把帮助，对话记录，图数据库以菜单的方式呈现
+
+**解决方案：**
+1. 创建 FloatingMenu 组件，点击展开菜单
+2. 菜单项：使用帮助、对话记录、图数据库
+3. 各组件改为受控模式，统一管理状态
+
+**代码改动：**
+- 新增 \`src/components/FloatingMenu.tsx\`
+- 修改各面板组件支持外部控制
+
+**状态标签：** ✅完成
+
+---
 `;
 
-export const ChatlogViewer = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface ChatlogViewerProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+  showTrigger?: boolean;
+}
+
+export const ChatlogViewer = ({ isOpen: externalIsOpen, onClose, showTrigger = false }: ChatlogViewerProps) => {
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
+  const handleClose = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      setInternalIsOpen(false);
+    }
+  };
 
   return (
     <>
-      {/* 触发按钮 - 右下角 */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-24 z-40 flex items-center gap-2 px-4 py-3 
-          bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500
-          text-white rounded-full shadow-lg shadow-cyan-900/30
-          transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-cyan-800/40"
-        title="查看对话记录"
-      >
-        <ChatBubbleLeftRightIcon className="w-5 h-5" />
-        <span className="text-sm font-medium">对话记录</span>
-      </button>
+      {/* 触发按钮 - 仅在 showTrigger 为 true 时显示 */}
+      {showTrigger && (
+        <button
+          onClick={() => setInternalIsOpen(true)}
+          className="fixed bottom-6 right-24 z-40 flex items-center gap-2 px-4 py-3 
+            bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500
+            text-white rounded-full shadow-lg shadow-cyan-900/30
+            transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-cyan-800/40"
+          title="查看对话记录"
+        >
+          <ChatBubbleLeftRightIcon className="w-5 h-5" />
+          <span className="text-sm font-medium">对话记录</span>
+        </button>
+      )}
 
       {/* 侧边面板 */}
       {isOpen && (
@@ -349,7 +388,7 @@ export const ChatlogViewer = () => {
           {/* 遮罩层 */}
           <div
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            onClick={() => setIsOpen(false)}
+            onClick={handleClose}
           />
 
           {/* 面板内容 */}
@@ -368,7 +407,7 @@ export const ChatlogViewer = () => {
                 </div>
               </div>
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={handleClose}
                 className="p-2 rounded-lg hover:bg-white/10 transition-colors"
               >
                 <XMarkIcon className="w-6 h-6 text-gray-400" />

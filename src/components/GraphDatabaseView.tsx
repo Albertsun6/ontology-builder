@@ -14,10 +14,25 @@ import { useOntologyStore } from '../store/ontologyStore';
 
 type TabType = 'overview' | 'schema' | 'cypher' | 'export';
 
-export const GraphDatabaseView = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface GraphDatabaseViewProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+  showTrigger?: boolean;
+}
+
+export const GraphDatabaseView = ({ isOpen: externalIsOpen, onClose, showTrigger = false }: GraphDatabaseViewProps) => {
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [copiedText, setCopiedText] = useState<string | null>(null);
+
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
+  const handleClose = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      setInternalIsOpen(false);
+    }
+  };
 
   const { ontology } = useOntologyStore();
 
@@ -222,25 +237,27 @@ RETURN path`);
 
   return (
     <>
-      {/* 触发按钮 */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-44 z-40 flex items-center gap-2 px-4 py-3 
-          bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500
-          text-white rounded-full shadow-lg shadow-violet-900/30
-          transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-violet-800/40"
-        title="图数据库视图"
-      >
-        <CircleStackIcon className="w-5 h-5" />
-        <span className="text-sm font-medium">图数据库</span>
-      </button>
+      {/* 触发按钮 - 仅在 showTrigger 为 true 时显示 */}
+      {showTrigger && (
+        <button
+          onClick={() => setInternalIsOpen(true)}
+          className="fixed bottom-6 right-44 z-40 flex items-center gap-2 px-4 py-3 
+            bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500
+            text-white rounded-full shadow-lg shadow-violet-900/30
+            transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-violet-800/40"
+          title="图数据库视图"
+        >
+          <CircleStackIcon className="w-5 h-5" />
+          <span className="text-sm font-medium">图数据库</span>
+        </button>
+      )}
 
       {/* 面板 */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex justify-end">
           <div
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            onClick={() => setIsOpen(false)}
+            onClick={handleClose}
           />
 
           <div className="relative w-full max-w-3xl bg-gradient-to-b from-slate-900 to-slate-950 
@@ -258,7 +275,7 @@ RETURN path`);
                 </div>
               </div>
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={handleClose}
                 className="p-2 rounded-lg hover:bg-white/10 transition-colors"
               >
                 <XMarkIcon className="w-6 h-6 text-gray-400" />
