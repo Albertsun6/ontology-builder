@@ -246,3 +246,28 @@
 **状态标签：** ✅完成
 
 ---
+
+## 前端对话记录查看器
+
+**时间戳：** 2025-12-29 04:10
+
+**对话标题：** 在前端显示对话记录
+
+**用户需求：**
+把 chatlog 放到前端查看，自动和后端同步
+
+**解决方案：**
+1. 创建 ChatlogViewer 组件
+2. 安装 react-markdown 渲染 Markdown 内容
+3. 右下角添加"对话记录"按钮（青色主题）
+4. 侧边栏形式展示完整对话历史
+5. 内容与 docs/Chatlog.md 保持同步
+
+**代码改动：**
+- 新增 `src/components/ChatlogViewer.tsx` - 对话记录查看器
+- 修改 `src/App.tsx` - 添加 ChatlogViewer
+- 修改 `src/components/index.ts` - 导出组件
+
+**状态标签：** ✅完成
+
+---

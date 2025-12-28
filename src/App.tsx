@@ -5,6 +5,7 @@ import Toolbar from './components/Toolbar';
 import Panel from './components/Panel';
 import ActionList from './components/ActionList';
 import HelpGuide from './components/HelpGuide';
+import { ChatlogViewer } from './components/ChatlogViewer';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Panel />
         <ActionList />
         <HelpGuide />
+        <ChatlogViewer />
       </div>
     </ReactFlowProvider>
   );

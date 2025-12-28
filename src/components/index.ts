@@ -7,6 +7,7 @@ export { default as Panel } from './Panel';
 // Feature Components
 export { default as ActionList } from './ActionList';
 export { default as HelpGuide } from './HelpGuide';
+export { ChatlogViewer } from './ChatlogViewer';
 
 // Editor Components
 export { default as PropertyEditor } from './PropertyEditor';
