@@ -17,6 +17,16 @@ import {
   tradeErpEdges 
 } from './tradeErpDemo';
 
+// Apply default layout (hierarchical, left-to-right)
+const defaultLayoutNodes = applyLayout(tradeErpNodes, tradeErpEdges, {
+  algorithm: 'dagre',
+  direction: 'LR',
+  nodeWidth: 280,
+  nodeHeight: 120,
+  nodeSpacing: 100,
+  rankSpacing: 200,
+});
+
 interface OntologyState {
   // Current ontology
   ontology: Ontology | null;
@@ -89,7 +99,7 @@ export const useOntologyStore = create<OntologyState>()(
   persist(
     (set, get) => ({
       ontology: tradeErpOntology,
-      nodes: tradeErpNodes,
+      nodes: defaultLayoutNodes,
       edges: tradeErpEdges,
       selectedNodeId: null,
       selectedEdgeId: null,
@@ -449,7 +459,7 @@ export const useOntologyStore = create<OntologyState>()(
       reset: () => {
         set({
           ontology: tradeErpOntology,
-          nodes: tradeErpNodes,
+          nodes: defaultLayoutNodes,
           edges: tradeErpEdges,
           selectedNodeId: null,
           selectedEdgeId: null,
@@ -476,12 +486,12 @@ export const useOntologyStore = create<OntologyState>()(
     }),
     {
       name: 'ontology-storage',
-      version: 8, // Increment to apply code cleanup
+      version: 9, // Increment to apply default LR layout
       migrate: (persistedState: unknown, version: number) => {
-        if (version < 8) {
+        if (version < 9) {
           return {
             ontology: tradeErpOntology,
-            nodes: tradeErpNodes,
+            nodes: defaultLayoutNodes,
             edges: tradeErpEdges,
             selectedNodeId: null,
             selectedEdgeId: null,
