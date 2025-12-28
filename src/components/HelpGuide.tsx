@@ -10,6 +10,11 @@ import {
   CursorArrowRaysIcon,
   DocumentArrowDownIcon,
   DocumentArrowUpIcon,
+  RocketLaunchIcon,
+  CommandLineIcon,
+  CircleStackIcon,
+  ServerStackIcon,
+  UserGroupIcon,
 } from '@heroicons/react/24/outline';
 
 interface Section {
@@ -315,6 +320,157 @@ export default function HelpGuide() {
             <p className="text-sm text-yellow-400">
               ⚠️ 导入会覆盖当前的所有数据，请先导出备份！
             </p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: 'use-cases',
+      title: '开发用途',
+      icon: RocketLaunchIcon,
+      color: 'text-rose-400',
+      content: (
+        <div className="space-y-4">
+          <p className="text-surface-300 leading-relaxed">
+            本体论建模工具在软件开发过程中扮演<strong className="text-surface-100">需求到代码之间的桥梁</strong>角色，
+            帮助团队在动手写代码之前把业务模型想清楚、画清楚。
+          </p>
+          
+          {/* 核心用途 */}
+          <div className="bg-surface-800/50 rounded-lg p-4 border border-surface-700">
+            <h4 className="font-medium text-surface-200 mb-3">🎯 核心用途</h4>
+            <div className="space-y-3 text-sm">
+              <div className="flex items-start gap-3">
+                <CubeIcon className="w-5 h-5 text-indigo-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <strong className="text-indigo-400">领域建模</strong>
+                  <p className="text-surface-400">在项目初期定义核心实体、属性和关系，作为技术设计的基础</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <CommandLineIcon className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <strong className="text-cyan-400">API 设计</strong>
+                  <p className="text-surface-400">对象类型 → REST 资源，动作 → API 端点，链接 → 嵌套资源</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <CircleStackIcon className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <strong className="text-green-400">数据库设计</strong>
+                  <p className="text-surface-400">直接映射到数据库表结构、字段定义和关联表</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <ServerStackIcon className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <strong className="text-purple-400">微服务边界</strong>
+                  <p className="text-surface-400">根据对象类型的聚合关系确定服务划分</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 开发流程 */}
+          <div className="bg-surface-800/50 rounded-lg p-4 border border-surface-700">
+            <h4 className="font-medium text-surface-200 mb-3">🔧 开发流程中的位置</h4>
+            <div className="flex items-center justify-between text-xs text-surface-400 bg-surface-900 rounded-lg p-3">
+              <span className="px-2 py-1 rounded bg-surface-700">需求分析</span>
+              <span>→</span>
+              <span className="px-2 py-1 rounded bg-rose-500/20 text-rose-400 font-medium">本体建模</span>
+              <span>→</span>
+              <span className="px-2 py-1 rounded bg-surface-700">技术设计</span>
+              <span>→</span>
+              <span className="px-2 py-1 rounded bg-surface-700">编码实现</span>
+              <span>→</span>
+              <span className="px-2 py-1 rounded bg-surface-700">测试部署</span>
+            </div>
+          </div>
+
+          {/* 应用场景 */}
+          <div className="bg-surface-800/50 rounded-lg p-4 border border-surface-700">
+            <h4 className="font-medium text-surface-200 mb-3">📋 应用场景</h4>
+            <div className="space-y-2 text-sm text-surface-400">
+              <div className="flex items-center gap-2">
+                <span className="text-emerald-400">✓</span>
+                <strong className="text-surface-300">新项目启动</strong> - 团队共同定义业务模型
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-emerald-400">✓</span>
+                <strong className="text-surface-300">需求变更评估</strong> - 评估修改影响范围和工作量
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-emerald-400">✓</span>
+                <strong className="text-surface-300">新成员入职</strong> - 快速理解业务概念和系统结构
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-emerald-400">✓</span>
+                <strong className="text-surface-300">前后端协作</strong> - 共享数据模型定义，减少沟通成本
+              </div>
+            </div>
+          </div>
+
+          {/* 执行规则对应 */}
+          <div className="bg-surface-800/50 rounded-lg p-4 border border-surface-700">
+            <h4 className="font-medium text-surface-200 mb-3">⚡ 执行规则 → 代码逻辑</h4>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="flex items-center gap-2 bg-surface-900 rounded px-2 py-1.5">
+                <span className="w-2 h-2 rounded-full bg-yellow-400"></span>
+                <span className="text-surface-300">validation</span>
+                <span className="text-surface-500">→ 参数校验</span>
+              </div>
+              <div className="flex items-center gap-2 bg-surface-900 rounded px-2 py-1.5">
+                <span className="w-2 h-2 rounded-full bg-green-400"></span>
+                <span className="text-surface-300">create_object</span>
+                <span className="text-surface-500">→ INSERT</span>
+              </div>
+              <div className="flex items-center gap-2 bg-surface-900 rounded px-2 py-1.5">
+                <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+                <span className="text-surface-300">update_property</span>
+                <span className="text-surface-500">→ UPDATE</span>
+              </div>
+              <div className="flex items-center gap-2 bg-surface-900 rounded px-2 py-1.5">
+                <span className="w-2 h-2 rounded-full bg-cyan-400"></span>
+                <span className="text-surface-300">create_link</span>
+                <span className="text-surface-500">→ 关联表</span>
+              </div>
+              <div className="flex items-center gap-2 bg-surface-900 rounded px-2 py-1.5">
+                <span className="w-2 h-2 rounded-full bg-purple-400"></span>
+                <span className="text-surface-300">webhook</span>
+                <span className="text-surface-500">→ 外部调用</span>
+              </div>
+              <div className="flex items-center gap-2 bg-surface-900 rounded px-2 py-1.5">
+                <span className="w-2 h-2 rounded-full bg-pink-400"></span>
+                <span className="text-surface-300">notification</span>
+                <span className="text-surface-500">→ 消息推送</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 适用项目 */}
+          <div className="bg-surface-800/50 rounded-lg p-4 border border-surface-700">
+            <h4 className="font-medium text-surface-200 mb-3 flex items-center gap-2">
+              <UserGroupIcon className="w-4 h-4 text-rose-400" />
+              适用项目类型
+            </h4>
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center justify-between">
+                <span className="text-surface-300">企业管理系统 (ERP/CRM)</span>
+                <span className="text-yellow-400">⭐⭐⭐⭐⭐</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-surface-300">电商平台</span>
+                <span className="text-yellow-400">⭐⭐⭐⭐⭐</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-surface-300">SaaS 应用</span>
+                <span className="text-yellow-400">⭐⭐⭐⭐</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-surface-300">数据平台</span>
+                <span className="text-yellow-400">⭐⭐⭐⭐</span>
+              </div>
+            </div>
           </div>
         </div>
       ),
