@@ -8,13 +8,24 @@ import {
   ArrowUpTrayIcon,
   TrashIcon,
   SparklesIcon,
+  ArrowsPointingOutIcon,
+  ChevronRightIcon,
 } from '@heroicons/react/24/outline';
 import { useOntologyStore } from '../store/ontologyStore';
+import { LAYOUT_ALGORITHMS, LAYOUT_DIRECTIONS, type LayoutAlgorithm, type LayoutDirection } from '../utils/layoutAlgorithms';
 
 export default function Toolbar() {
-  const { ontology, openPanel, exportOntology, importOntology, reset } = useOntologyStore();
+  const { ontology, openPanel, exportOntology, importOntology, reset, autoLayout } = useOntologyStore();
   const [showImportModal, setShowImportModal] = useState(false);
   const [importData, setImportData] = useState('');
+  const [showLayoutMenu, setShowLayoutMenu] = useState(false);
+  const [selectedAlgorithm, setSelectedAlgorithm] = useState<LayoutAlgorithm>('dagre');
+  const [selectedDirection, setSelectedDirection] = useState<LayoutDirection>('TB');
+
+  const handleAutoLayout = () => {
+    autoLayout(selectedAlgorithm, selectedDirection);
+    setShowLayoutMenu(false);
+  };
 
   const handleExport = () => {
     const data = exportOntology();
@@ -95,6 +106,95 @@ export default function Toolbar() {
               </span>
             </button>
           ))}
+          
+          <div className="h-px bg-surface-700 mx-1" />
+          
+          {/* Auto Layout */}
+          <div className="relative">
+            <button
+              onClick={() => setShowLayoutMenu(!showLayoutMenu)}
+              className="w-12 h-12 flex items-center justify-center rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 transition-all duration-200 group relative"
+              title="自动布局"
+            >
+              <ArrowsPointingOutIcon className="w-5 h-5" />
+              <span className="absolute left-full ml-3 px-2 py-1 bg-surface-800 text-surface-200 text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                自动布局
+              </span>
+            </button>
+            
+            {/* Layout Menu */}
+            {showLayoutMenu && (
+              <div className="absolute left-full ml-3 top-0 bg-surface-800 border border-surface-600 rounded-xl shadow-2xl p-4 min-w-[280px] z-50 animate-fade-in">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-sm font-semibold text-white">自动布局</h3>
+                  <button 
+                    onClick={() => setShowLayoutMenu(false)}
+                    className="text-gray-400 hover:text-white"
+                  >
+                    ×
+                  </button>
+                </div>
+                
+                {/* Algorithm Selection */}
+                <div className="mb-4">
+                  <label className="text-xs text-gray-400 mb-2 block">布局算法</label>
+                  <div className="space-y-1">
+                    {LAYOUT_ALGORITHMS.map((algo) => (
+                      <button
+                        key={algo.id}
+                        onClick={() => setSelectedAlgorithm(algo.id)}
+                        className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors
+                          ${selectedAlgorithm === algo.id 
+                            ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' 
+                            : 'bg-surface-700/50 text-gray-300 hover:bg-surface-700 border border-transparent'}`}
+                      >
+                        <span className="text-lg">{algo.icon}</span>
+                        <div className="flex-1">
+                          <div className="text-sm font-medium">{algo.name}</div>
+                          <div className="text-xs text-gray-500">{algo.description}</div>
+                        </div>
+                        {selectedAlgorithm === algo.id && (
+                          <ChevronRightIcon className="w-4 h-4 text-emerald-400" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Direction (only for dagre) */}
+                {selectedAlgorithm === 'dagre' && (
+                  <div className="mb-4">
+                    <label className="text-xs text-gray-400 mb-2 block">布局方向</label>
+                    <div className="flex gap-2">
+                      {LAYOUT_DIRECTIONS.map((dir) => (
+                        <button
+                          key={dir.id}
+                          onClick={() => setSelectedDirection(dir.id)}
+                          className={`flex-1 flex flex-col items-center gap-1 px-2 py-2 rounded-lg transition-colors
+                            ${selectedDirection === dir.id 
+                              ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' 
+                              : 'bg-surface-700/50 text-gray-400 hover:bg-surface-700 border border-transparent'}`}
+                          title={dir.name}
+                        >
+                          <span className="text-lg">{dir.icon}</span>
+                          <span className="text-xs">{dir.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Apply Button */}
+                <button
+                  onClick={handleAutoLayout}
+                  className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                >
+                  <ArrowsPointingOutIcon className="w-4 h-4" />
+                  应用布局
+                </button>
+              </div>
+            )}
+          </div>
           
           <div className="h-px bg-surface-700 mx-1" />
           

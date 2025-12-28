@@ -11,6 +11,7 @@ import type {
   OntologyNode,
   OntologyEdge 
 } from '../types/ontology';
+import { applyLayout, type LayoutOptions, type LayoutAlgorithm, type LayoutDirection } from '../utils/layoutAlgorithms';
 
 interface OntologyState {
   // Current ontology
@@ -73,6 +74,9 @@ interface OntologyState {
   
   // Reset
   reset: () => void;
+  
+  // Auto Layout
+  autoLayout: (algorithm: LayoutAlgorithm, direction?: LayoutDirection) => void;
 }
 
 const now = () => new Date().toISOString();
@@ -1009,6 +1013,20 @@ export const useOntologyStore = create<OntologyState>()(
           panelMode: null,
           panelType: null,
         });
+      },
+
+      autoLayout: (algorithm, direction = 'TB') => {
+        const state = get();
+        const options: LayoutOptions = {
+          algorithm,
+          direction,
+          nodeWidth: 280,
+          nodeHeight: 120,
+          nodeSpacing: 100,
+          rankSpacing: 180,
+        };
+        const newNodes = applyLayout(state.nodes, state.edges, options);
+        set({ nodes: newNodes });
       },
     }),
     {
