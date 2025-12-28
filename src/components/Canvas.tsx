@@ -45,6 +45,7 @@ export default function Canvas() {
     setSelectedEdge,
     updateNodePosition,
     addLinkType,
+    openPanel,
     ontology,
   } = useOntologyStore();
 
@@ -106,6 +107,14 @@ export default function Canvas() {
     [setSelectedEdge]
   );
 
+  const onEdgeDoubleClick = useCallback(
+    (_: React.MouseEvent, edge: Edge) => {
+      setSelectedEdge(edge.id);
+      openPanel('edit', 'linkType');
+    },
+    [setSelectedEdge, openPanel]
+  );
+
   const onPaneClick = useCallback(() => {
     setSelectedNode(null);
     setSelectedEdge(null);
@@ -122,6 +131,7 @@ export default function Canvas() {
         onNodeDragStop={onNodeDragStop}
         onNodeClick={onNodeClick}
         onEdgeClick={onEdgeClick}
+        onEdgeDoubleClick={onEdgeDoubleClick}
         onPaneClick={onPaneClick}
         nodeTypes={nodeTypes}
         defaultEdgeOptions={defaultEdgeOptions}
