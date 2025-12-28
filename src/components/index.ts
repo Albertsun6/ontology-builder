@@ -10,6 +10,7 @@ export { default as HelpGuide } from './HelpGuide';
 export { ChatlogViewer } from './ChatlogViewer';
 export { GraphDatabaseView } from './GraphDatabaseView';
 export { FloatingMenu } from './FloatingMenu';
+export { Methodology } from './Methodology';
 
 // Editor Components
 export { default as PropertyEditor } from './PropertyEditor';

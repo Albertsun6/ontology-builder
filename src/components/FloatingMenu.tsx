@@ -5,6 +5,7 @@ import {
   QuestionMarkCircleIcon,
   ChatBubbleLeftRightIcon,
   CircleStackIcon,
+  AcademicCapIcon,
 } from '@heroicons/react/24/outline';
 
 interface MenuItem {
@@ -20,12 +21,14 @@ interface FloatingMenuProps {
   onOpenHelp: () => void;
   onOpenChatlog: () => void;
   onOpenGraphDB: () => void;
+  onOpenMethodology: () => void;
 }
 
 export const FloatingMenu = ({
   onOpenHelp,
   onOpenChatlog,
   onOpenGraphDB,
+  onOpenMethodology,
 }: FloatingMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -60,6 +63,17 @@ export const FloatingMenu = ({
       bgColor: 'bg-violet-500/20 hover:bg-violet-500/30',
       onClick: () => {
         onOpenGraphDB();
+        setIsOpen(false);
+      },
+    },
+    {
+      id: 'methodology',
+      label: '开发方法论',
+      icon: AcademicCapIcon,
+      color: 'text-amber-400',
+      bgColor: 'bg-amber-500/20 hover:bg-amber-500/30',
+      onClick: () => {
+        onOpenMethodology();
         setIsOpen(false);
       },
     },

@@ -345,6 +345,30 @@ const CHATLOG_CONTENT = `# 对话记录
 **状态标签：** ✅完成
 
 ---
+
+## 添加开发方法论和 Cursor Rules
+
+**时间戳：** 2025-12-29 05:00
+
+**对话标题：** 抽象开发方法论并生成开发规范
+
+**用户需求：**
+把对话和做事过程抽象成方法论，添加到前端，并生成 Cursor rules
+
+**解决方案：**
+1. 创建 Methodology 组件展示开发方法论
+   - 核心原则：对话驱动、快速迭代、即时反馈、文档同步
+   - 开发阶段：理解 → 设计 → 迭代 → 优化 → 文档
+2. 生成 .cursorrules 规范文件
+   - 项目结构、组件开发、状态管理等规范
+
+**代码改动：**
+- 新增 \`src/components/Methodology.tsx\`
+- 新增 \`.cursorrules\`
+
+**状态标签：** ✅完成
+
+---
 `;
 
 interface ChatlogViewerProps {
