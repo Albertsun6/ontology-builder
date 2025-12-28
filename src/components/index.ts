@@ -8,6 +8,7 @@ export { default as Panel } from './Panel';
 export { default as ActionList } from './ActionList';
 export { default as HelpGuide } from './HelpGuide';
 export { ChatlogViewer } from './ChatlogViewer';
+export { GraphDatabaseView } from './GraphDatabaseView';
 
 // Editor Components
 export { default as PropertyEditor } from './PropertyEditor';

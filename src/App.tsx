@@ -6,6 +6,7 @@ import Panel from './components/Panel';
 import ActionList from './components/ActionList';
 import HelpGuide from './components/HelpGuide';
 import { ChatlogViewer } from './components/ChatlogViewer';
+import { GraphDatabaseView } from './components/GraphDatabaseView';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <ActionList />
         <HelpGuide />
         <ChatlogViewer />
+        <GraphDatabaseView />
       </div>
     </ReactFlowProvider>
   );
