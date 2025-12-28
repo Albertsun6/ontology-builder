@@ -3,7 +3,8 @@ import { XMarkIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useOntologyStore } from '../store/ontologyStore';
 import PropertyEditor from './PropertyEditor';
 import ParameterEditor from './ParameterEditor';
-import type { Property, ObjectType, Interface, LinkType, Action, ActionParameter } from '../types/ontology';
+import RuleEditor from './RuleEditor';
+import type { Property, ObjectType, Interface, LinkType, Action, ActionParameter, ActionRule } from '../types/ontology';
 
 // Color options for objects
 const colorOptions = [
@@ -538,6 +539,7 @@ function ActionPanel({
   const [description, setDescription] = useState(existingAction?.description || '');
   const [objectTypeId, setObjectTypeId] = useState(existingAction?.objectTypeId || '');
   const [parameters, setParameters] = useState<ActionParameter[]>(existingAction?.parameters || []);
+  const [rules, setRules] = useState<ActionRule[]>(existingAction?.rules || []);
 
   useEffect(() => {
     if (existingAction) {
@@ -546,6 +548,7 @@ function ActionPanel({
       setDescription(existingAction.description || '');
       setObjectTypeId(existingAction.objectTypeId);
       setParameters(existingAction.parameters);
+      setRules(existingAction.rules || []);
     }
   }, [existingAction]);
 
@@ -559,6 +562,7 @@ function ActionPanel({
         description, 
         objectTypeId,
         parameters,
+        rules,
       });
     } else if (selectedId) {
       updateAction(selectedId, {
@@ -567,6 +571,7 @@ function ActionPanel({
         description,
         objectTypeId,
         parameters,
+        rules,
       });
     }
     onClose();
@@ -640,6 +645,15 @@ function ActionPanel({
           parameters={parameters}
           onChange={setParameters}
         />
+
+        {/* Rule Editor */}
+        {objectTypeId && (
+          <RuleEditor
+            rules={rules}
+            onChange={setRules}
+            objectTypeId={objectTypeId}
+          />
+        )}
       </div>
 
       <PanelFooter 

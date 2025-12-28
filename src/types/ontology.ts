@@ -88,11 +88,88 @@ export interface ActionParameter {
   description?: string;
 }
 
+// 执行规则类型
+export type ActionRuleType = 
+  | 'create_object'      // 创建新对象
+  | 'update_property'    // 更新属性
+  | 'create_link'        // 创建链接
+  | 'delete_link'        // 删除链接
+  | 'validation'         // 验证规则
+  | 'webhook'            // 调用外部API
+  | 'notification';      // 发送通知
+
 export interface ActionRule {
   id: string;
-  type: 'validation' | 'transformation' | 'side-effect';
+  type: ActionRuleType;
+  name: string;
+  description?: string;
+  enabled: boolean;
+  order: number;  // 执行顺序
+  config: ActionRuleConfig;
+}
+
+// 规则配置 - 根据类型不同有不同的配置
+export type ActionRuleConfig = 
+  | CreateObjectConfig
+  | UpdatePropertyConfig
+  | CreateLinkConfig
+  | DeleteLinkConfig
+  | ValidationConfig
+  | WebhookConfig
+  | NotificationConfig;
+
+export interface CreateObjectConfig {
+  type: 'create_object';
+  targetObjectTypeId: string;  // 要创建的对象类型
+  propertyMappings: PropertyMapping[];  // 属性映射
+}
+
+export interface UpdatePropertyConfig {
+  type: 'update_property';
+  targetProperty: string;  // 要更新的属性
+  valueSource: 'parameter' | 'expression' | 'constant';
+  value: string;  // 参数名、表达式或常量值
+}
+
+export interface CreateLinkConfig {
+  type: 'create_link';
+  linkTypeId: string;  // 链接类型
+  targetSource: 'parameter' | 'created_object' | 'expression';
+  targetValue: string;
+}
+
+export interface DeleteLinkConfig {
+  type: 'delete_link';
+  linkTypeId: string;
   condition?: string;
-  action: string;
+}
+
+export interface ValidationConfig {
+  type: 'validation';
+  condition: string;  // 验证条件表达式
+  errorMessage: string;  // 验证失败时的错误消息
+}
+
+export interface WebhookConfig {
+  type: 'webhook';
+  url: string;
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  headers?: Record<string, string>;
+  bodyTemplate?: string;
+}
+
+export interface NotificationConfig {
+  type: 'notification';
+  channel: 'email' | 'sms' | 'push' | 'internal';
+  recipientSource: 'parameter' | 'property' | 'constant';
+  recipient: string;
+  messageTemplate: string;
+}
+
+export interface PropertyMapping {
+  targetProperty: string;  // 目标对象的属性
+  sourceType: 'parameter' | 'source_property' | 'expression' | 'constant';
+  sourceValue: string;
 }
 
 export interface Ontology {

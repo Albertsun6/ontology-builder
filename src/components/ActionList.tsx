@@ -148,6 +148,21 @@ export default function ActionList() {
                         </div>
                       </div>
                     )}
+
+                    {action.rules && action.rules.length > 0 && (
+                      <div className="mt-3 pt-3 border-t border-surface-700">
+                        <p className="text-xs text-surface-500 mb-2">执行规则：</p>
+                        <div className="space-y-1">
+                          {action.rules.map((rule) => (
+                            <div key={rule.id} className="flex items-center gap-2 text-xs">
+                              <span className={`w-2 h-2 rounded-full ${rule.enabled ? 'bg-green-400' : 'bg-surface-500'}`} />
+                              <span className="text-surface-300">{rule.name}</span>
+                              <span className="text-surface-500">({rule.type})</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))
               )}

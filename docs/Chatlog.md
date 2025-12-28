@@ -141,3 +141,34 @@
 **状态标签：** ✅完成
 
 ---
+
+## 执行规则编辑器
+
+**时间戳：** 2025-12-29 00:40
+
+**对话标题：** 动作执行逻辑如何记录和管理
+
+**用户需求：**
+动作的"执行"部分如何记录和管理
+
+**解决方案：**
+1. 扩展 ActionRule 类型定义，支持 6 种规则类型：
+   - 创建对象 (create_object)
+   - 更新属性 (update_property)
+   - 创建链接 (create_link)
+   - 验证规则 (validation)
+   - 调用接口 (webhook)
+   - 发送通知 (notification)
+2. 创建 RuleEditor 组件，提供可视化规则配置界面
+3. 每个规则类型有专门的配置表单
+4. 支持规则排序、启用/禁用、删除
+
+**代码改动：**
+- 修改 `src/types/ontology.ts` - 扩展规则类型定义
+- 新增 `src/components/RuleEditor.tsx` - 执行规则编辑器
+- 修改 `src/components/Panel.tsx` - 在动作编辑中集成规则编辑器
+- 修改 `src/components/ActionList.tsx` - 显示规则列表
+
+**状态标签：** ✅完成
+
+---
