@@ -23,6 +23,7 @@ import {
   BeakerIcon,
 } from '@heroicons/react/24/outline';
 import { useOntologyStore } from '../../store/ontologyStore';
+import { ForceGraph } from './ForceGraph';
 
 type TabType = 'overview' | 'visual' | 'schema' | 'cypher' | 'analytics' | 'export';
 
@@ -561,168 +562,61 @@ ORDER BY relationships DESC`,
 
               {/* Visual Tab */}
               {activeTab === 'visual' && (
-                <div className="p-6 space-y-6">
-                  {/* Interactive graph visualization */}
-                  <div className="bg-gradient-to-br from-slate-800/60 to-slate-900/80 rounded-xl border border-slate-700/50 overflow-hidden">
-                    <div className="px-5 py-3 border-b border-slate-700/50 flex items-center justify-between">
+                <div className="p-4">
+                  {/* Obsidian-style force graph */}
+                  <div className="bg-slate-800/30 rounded-xl border border-slate-700/50 overflow-hidden">
+                    <div className="px-4 py-3 border-b border-slate-700/50 flex items-center justify-between">
                       <h3 className="font-semibold text-white flex items-center gap-2">
                         <SparklesIcon className="w-5 h-5 text-violet-400" />
-                        Schema 可视化
+                        力导向图谱
+                        <span className="text-xs text-gray-500 font-normal">Obsidian 风格</span>
                       </h3>
-                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                      <div className="flex items-center gap-3 text-xs text-gray-500">
                         <span className="flex items-center gap-1">
                           <span className="w-3 h-3 rounded-full bg-indigo-500"></span> 节点
                         </span>
                         <span className="flex items-center gap-1">
-                          <span className="w-8 h-0.5 bg-cyan-500"></span> 关系
+                          <span className="w-8 h-0.5 bg-violet-500"></span> 关系
                         </span>
+                        <span>节点数: {graphSchema.nodeLabels.length}</span>
                       </div>
                     </div>
-                    <div className="p-6 min-h-[400px] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-800/50 via-slate-900/80 to-slate-950">
-                      <div className="relative w-full h-[350px]">
-                        {/* Render nodes in a circle */}
-                        {graphSchema.nodeLabels.map((node, i) => {
-                          const totalNodes = graphSchema.nodeLabels.length;
-                          const angle = (i / totalNodes) * 2 * Math.PI - Math.PI / 2;
-                          const radius = 140;
-                          const centerX = 50;
-                          const centerY = 50;
-                          const x = centerX + radius * Math.cos(angle) / 3.5;
-                          const y = centerY + radius * Math.sin(angle) / 2;
-                          
-                          const relatedRels = graphSchema.relationships.filter(
-                            r => r.fromLabel === node.label || r.toLabel === node.label
-                          );
-                          
-                          return (
-                            <div
-                              key={node.label}
-                              className={`absolute transform -translate-x-1/2 -translate-y-1/2 
-                                cursor-pointer transition-all duration-300 group
-                                ${selectedNode === node.label ? 'scale-110 z-10' : 'hover:scale-105'}`}
-                              style={{ left: `${x}%`, top: `${y}%` }}
-                              onClick={() => setSelectedNode(selectedNode === node.label ? null : node.label)}
-                            >
-                              <div 
-                                className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl
-                                  border-2 shadow-lg transition-all
-                                  ${selectedNode === node.label ? 'ring-4 ring-violet-500/50' : ''}`}
-                                style={{
-                                  backgroundColor: `${node.color}20`,
-                                  borderColor: node.color,
-                                  boxShadow: `0 0 25px ${node.color}40`,
-                                }}
-                              >
-                                {node.icon || '📦'}
-                              </div>
-                              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                                <div className="text-xs font-medium text-white text-center">{node.displayName}</div>
-                                <div className="text-xs text-gray-500 text-center">
-                                  {relatedRels.length} 关系
-                                </div>
-                              </div>
-                              
-                              {/* Hover tooltip */}
-                              <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 
-                                opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20">
-                                <div className="bg-slate-800 border border-slate-600 rounded-lg p-3 shadow-xl min-w-[180px]">
-                                  <div className="font-mono text-indigo-400 text-sm mb-2">:{node.label}</div>
-                                  <div className="space-y-1 text-xs">
-                                    {node.properties.slice(0, 4).map(p => (
-                                      <div key={p.name} className="flex items-center gap-2">
-                                        {p.isKey && <KeyIcon className="w-3 h-3 text-yellow-400" />}
-                                        <span className="text-gray-300">{p.name}</span>
-                                        <span className="text-gray-500">:</span>
-                                        <span className="text-amber-400">{p.type}</span>
-                                      </div>
-                                    ))}
-                                    {node.properties.length > 4 && (
-                                      <div className="text-gray-500">+{node.properties.length - 4} more</div>
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                        
-                        {/* SVG lines for relationships */}
-                        <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: -1 }}>
-                          <defs>
-                            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-                              <polygon points="0 0, 10 3.5, 0 7" fill="#06b6d4" fillOpacity="0.6" />
-                            </marker>
-                          </defs>
-                          {graphSchema.relationships.slice(0, 20).map((rel, i) => {
-                            const fromIdx = graphSchema.nodeLabels.findIndex(n => n.label === rel.fromLabel);
-                            const toIdx = graphSchema.nodeLabels.findIndex(n => n.label === rel.toLabel);
-                            if (fromIdx === -1 || toIdx === -1) return null;
-                            
-                            const totalNodes = graphSchema.nodeLabels.length;
-                            const fromAngle = (fromIdx / totalNodes) * 2 * Math.PI - Math.PI / 2;
-                            const toAngle = (toIdx / totalNodes) * 2 * Math.PI - Math.PI / 2;
-                            const radius = 140;
-                            
-                            const x1 = 50 + radius * Math.cos(fromAngle) / 3.5;
-                            const y1 = 50 + radius * Math.sin(fromAngle) / 2;
-                            const x2 = 50 + radius * Math.cos(toAngle) / 3.5;
-                            const y2 = 50 + radius * Math.sin(toAngle) / 2;
-                            
-                            const isHighlighted = selectedNode === rel.fromLabel || selectedNode === rel.toLabel;
-                            
-                            return (
-                              <line
-                                key={i}
-                                x1={`${x1}%`}
-                                y1={`${y1}%`}
-                                x2={`${x2}%`}
-                                y2={`${y2}%`}
-                                stroke={isHighlighted ? '#06b6d4' : '#475569'}
-                                strokeWidth={isHighlighted ? 2 : 1}
-                                strokeOpacity={isHighlighted ? 0.8 : 0.3}
-                                markerEnd={isHighlighted ? 'url(#arrowhead)' : undefined}
-                              />
-                            );
-                          })}
-                        </svg>
+                    <ForceGraph
+                      nodes={graphSchema.nodeLabels}
+                      links={graphSchema.relationships}
+                      onNodeClick={(nodeId) => setSelectedNode(selectedNode === nodeId ? null : nodeId)}
+                      selectedNode={selectedNode}
+                      height={520}
+                    />
+                  </div>
+
+                  {/* Legend and tips */}
+                  <div className="mt-4 grid grid-cols-3 gap-4">
+                    <div className="bg-slate-800/30 rounded-lg p-3 border border-slate-700/30">
+                      <div className="text-xs text-gray-400 mb-2">交互操作</div>
+                      <div className="space-y-1 text-xs text-gray-500">
+                        <div>🖱️ 点击节点查看详情</div>
+                        <div>✋ 拖拽节点调整位置</div>
+                        <div>🔍 滚轮缩放视图</div>
+                      </div>
+                    </div>
+                    <div className="bg-slate-800/30 rounded-lg p-3 border border-slate-700/30">
+                      <div className="text-xs text-gray-400 mb-2">节点大小</div>
+                      <div className="space-y-1 text-xs text-gray-500">
+                        <div>节点越大 = 连接越多</div>
+                        <div>相连节点会互相吸引</div>
+                        <div>非相连节点会互相排斥</div>
+                      </div>
+                    </div>
+                    <div className="bg-slate-800/30 rounded-lg p-3 border border-slate-700/30">
+                      <div className="text-xs text-gray-400 mb-2">高亮效果</div>
+                      <div className="space-y-1 text-xs text-gray-500">
+                        <div>选中节点显示关系线</div>
+                        <div>悬停显示连接数徽章</div>
+                        <div>非相关节点自动淡化</div>
                       </div>
                     </div>
                   </div>
-
-                  {/* Selected node details */}
-                  {selectedNode && (
-                    <div className="bg-gradient-to-br from-violet-900/20 to-purple-900/10 rounded-xl border border-violet-500/30 p-5">
-                      <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
-                        <CubeIcon className="w-5 h-5 text-violet-400" />
-                        {graphSchema.nodeLabels.find(n => n.label === selectedNode)?.displayName}
-                        <span className="font-mono text-indigo-400 text-sm">:{selectedNode}</span>
-                      </h4>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <h5 className="text-sm text-gray-400 mb-2">关联关系 (出)</h5>
-                          <div className="space-y-1">
-                            {graphSchema.relationships.filter(r => r.fromLabel === selectedNode).map(r => (
-                              <div key={r.type} className="text-sm flex items-center gap-2">
-                                <span className="text-cyan-400">-[:{r.type}]-&gt;</span>
-                                <span className="text-gray-300">{r.toLabel}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                        <div>
-                          <h5 className="text-sm text-gray-400 mb-2">关联关系 (入)</h5>
-                          <div className="space-y-1">
-                            {graphSchema.relationships.filter(r => r.toLabel === selectedNode).map(r => (
-                              <div key={r.type} className="text-sm flex items-center gap-2">
-                                <span className="text-gray-300">{r.fromLabel}</span>
-                                <span className="text-cyan-400">-[:{r.type}]-&gt;</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </div>
               )}
 
