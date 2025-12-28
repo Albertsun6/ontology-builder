@@ -7,7 +7,7 @@ import {
   ChevronDownIcon,
   KeyIcon,
 } from '@heroicons/react/24/outline';
-import type { Property, PropertyType } from '../types/ontology';
+import type { Property, PropertyType } from '../../types/ontology';
 
 interface PropertyEditorProps {
   properties: Property[];

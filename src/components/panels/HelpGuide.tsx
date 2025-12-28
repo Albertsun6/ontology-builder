@@ -15,6 +15,7 @@ import {
   CircleStackIcon,
   ServerStackIcon,
   UserGroupIcon,
+  AcademicCapIcon,
 } from '@heroicons/react/24/outline';
 
 interface Section {
@@ -486,6 +487,183 @@ export default function HelpGuide({ isOpen: externalIsOpen, onClose, showTrigger
                 <span className="text-yellow-400">⭐⭐⭐⭐</span>
               </div>
             </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: 'graph-db',
+      title: '图数据库',
+      icon: CircleStackIcon,
+      color: 'text-violet-400',
+      content: (
+        <div className="space-y-4">
+          <p className="text-surface-300 leading-relaxed">
+            本体模型天然适合图数据库表示。工具提供了<strong className="text-surface-100">图数据库视图</strong>，
+            可以将本体自动映射到 Neo4j 等图数据库的 Schema。
+          </p>
+          
+          {/* 概念映射 */}
+          <div className="bg-surface-800/50 rounded-lg p-4 border border-surface-700">
+            <h4 className="font-medium text-surface-200 mb-3">🔄 概念映射</h4>
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center gap-4">
+                <span className="w-24 text-surface-400">对象类型</span>
+                <span className="text-violet-400">→</span>
+                <span className="text-surface-200">节点标签 (Node Label)</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <span className="w-24 text-surface-400">属性</span>
+                <span className="text-violet-400">→</span>
+                <span className="text-surface-200">节点属性 (Properties)</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <span className="w-24 text-surface-400">链接类型</span>
+                <span className="text-violet-400">→</span>
+                <span className="text-surface-200">关系类型 (Relationship)</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <span className="w-24 text-surface-400">主键</span>
+                <span className="text-violet-400">→</span>
+                <span className="text-surface-200">唯一性约束 (Constraint)</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 功能介绍 */}
+          <div className="bg-surface-800/50 rounded-lg p-4 border border-surface-700">
+            <h4 className="font-medium text-surface-200 mb-3">📊 功能 Tab</h4>
+            <ul className="space-y-2 text-sm text-surface-400">
+              <li className="flex items-start gap-2">
+                <span className="text-violet-400 font-medium">概览</span>
+                <span>- 节点/关系统计、概念映射说明、图结构预览</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-violet-400 font-medium">Schema</span>
+                <span>- 节点类型详情、关系类型列表、属性定义</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-violet-400 font-medium">Cypher</span>
+                <span>- 自动生成约束语句、创建示例、查询模板</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-violet-400 font-medium">导出</span>
+                <span>- 完整 Neo4j Schema 脚本，一键复制</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Cypher 示例 */}
+          <div className="bg-surface-800/50 rounded-lg p-4 border border-surface-700">
+            <h4 className="font-medium text-surface-200 mb-3">💻 Cypher 示例</h4>
+            <pre className="text-xs text-surface-400 bg-surface-900 rounded p-3 overflow-x-auto">
+{`// 创建节点
+CREATE (n:CUSTOMER {
+  customer_id: "C001",
+  name: "张三",
+  email: "zhangsan@example.com"
+})
+
+// 创建关系
+MATCH (a:CUSTOMER), (b:ORDER)
+WHERE a.customer_id = "C001"
+CREATE (a)-[:CUSTOMER_ORDERS]->(b)`}
+            </pre>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: 'methodology',
+      title: '开发方法论',
+      icon: AcademicCapIcon,
+      color: 'text-amber-400',
+      content: (
+        <div className="space-y-4">
+          <p className="text-surface-300 leading-relaxed">
+            本项目采用 <strong className="text-surface-100">AI 协作开发方法论</strong>，
+            通过对话驱动的方式快速迭代开发。
+          </p>
+          
+          {/* 核心原则 */}
+          <div className="bg-surface-800/50 rounded-lg p-4 border border-surface-700">
+            <h4 className="font-medium text-surface-200 mb-3">🎯 核心原则</h4>
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+                <span className="text-surface-300">对话驱动</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-green-400"></span>
+                <span className="text-surface-300">快速迭代</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+                <span className="text-surface-300">即时反馈</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-cyan-400"></span>
+                <span className="text-surface-300">文档同步</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 开发阶段 */}
+          <div className="bg-surface-800/50 rounded-lg p-4 border border-surface-700">
+            <h4 className="font-medium text-surface-200 mb-3">🔄 开发阶段</h4>
+            <div className="flex items-center justify-between text-xs bg-surface-900 rounded-lg p-3">
+              <div className="text-center">
+                <div className="w-8 h-8 mx-auto mb-1 rounded-full bg-amber-500/20 flex items-center justify-center">
+                  <span className="text-amber-400">💡</span>
+                </div>
+                <span className="text-amber-400">理解</span>
+              </div>
+              <span className="text-surface-600">→</span>
+              <div className="text-center">
+                <div className="w-8 h-8 mx-auto mb-1 rounded-full bg-blue-500/20 flex items-center justify-center">
+                  <span className="text-blue-400">📐</span>
+                </div>
+                <span className="text-blue-400">设计</span>
+              </div>
+              <span className="text-surface-600">→</span>
+              <div className="text-center">
+                <div className="w-8 h-8 mx-auto mb-1 rounded-full bg-green-500/20 flex items-center justify-center">
+                  <span className="text-green-400">🔄</span>
+                </div>
+                <span className="text-green-400">迭代</span>
+              </div>
+              <span className="text-surface-600">→</span>
+              <div className="text-center">
+                <div className="w-8 h-8 mx-auto mb-1 rounded-full bg-purple-500/20 flex items-center justify-center">
+                  <span className="text-purple-400">🚀</span>
+                </div>
+                <span className="text-purple-400">优化</span>
+              </div>
+              <span className="text-surface-600">→</span>
+              <div className="text-center">
+                <div className="w-8 h-8 mx-auto mb-1 rounded-full bg-cyan-500/20 flex items-center justify-center">
+                  <span className="text-cyan-400">📝</span>
+                </div>
+                <span className="text-cyan-400">文档</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 最佳实践 */}
+          <div className="bg-surface-800/50 rounded-lg p-4 border border-surface-700">
+            <h4 className="font-medium text-surface-200 mb-3">✅ 最佳实践</h4>
+            <ul className="space-y-1 text-sm text-surface-400">
+              <li>• 每次只提出一个明确的需求</li>
+              <li>• 及时反馈功能是否符合预期</li>
+              <li>• 保持对话记录便于回溯</li>
+              <li>• 先实现核心功能再优化</li>
+            </ul>
+          </div>
+
+          <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4">
+            <p className="text-sm text-amber-400">
+              💡 点击右下角菜单的"开发方法论"查看完整的方法论文档和实践指南。
+            </p>
           </div>
         </div>
       ),

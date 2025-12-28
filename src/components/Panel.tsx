@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { XMarkIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useOntologyStore } from '../store/ontologyStore';
-import PropertyEditor from './PropertyEditor';
-import ParameterEditor from './ParameterEditor';
-import RuleEditor from './RuleEditor';
+import PropertyEditor from './editors/PropertyEditor';
+import ParameterEditor from './editors/ParameterEditor';
+import RuleEditor from './editors/RuleEditor';
 import type { Property, ActionParameter, ActionRule } from '../types/ontology';
 
 // Color options for objects

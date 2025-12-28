@@ -6,7 +6,7 @@ import {
   TrashIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
-import { useOntologyStore } from '../store/ontologyStore';
+import { useOntologyStore } from '../../store/ontologyStore';
 
 export default function ActionList() {
   const { ontology, deleteAction, setSelectedAction, openPanel } = useOntologyStore();

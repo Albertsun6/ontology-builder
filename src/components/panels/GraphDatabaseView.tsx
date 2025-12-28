@@ -10,7 +10,7 @@ import {
   ChartBarIcon,
   CodeBracketIcon,
 } from '@heroicons/react/24/outline';
-import { useOntologyStore } from '../store/ontologyStore';
+import { useOntologyStore } from '../../store/ontologyStore';
 
 type TabType = 'overview' | 'schema' | 'cypher' | 'export';
 

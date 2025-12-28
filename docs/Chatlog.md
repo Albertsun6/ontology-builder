@@ -400,3 +400,59 @@
 **状态标签：** ✅完成
 
 ---
+
+## 代码结构整理和帮助文档更新
+
+**时间戳：** 2025-12-29 05:15
+
+**对话标题：** 更新帮助文档，代码结构化整理
+
+**用户需求：**
+更新前端的帮助文档，并做一次代码的结构化整理，便于管理和维护
+
+**解决方案：**
+
+### 1. 帮助文档更新
+- 新增"图数据库"章节：概念映射、功能 Tab 说明、Cypher 示例
+- 新增"开发方法论"章节：核心原则、开发阶段、最佳实践
+
+### 2. 代码结构整理
+将组件按职能分类到子目录：
+
+```
+components/
+├── panels/          # 面板组件
+│   ├── HelpGuide.tsx
+│   ├── ChatlogViewer.tsx
+│   ├── GraphDatabaseView.tsx
+│   ├── Methodology.tsx
+│   └── ActionList.tsx
+├── editors/         # 编辑器组件
+│   ├── PropertyEditor.tsx
+│   ├── ParameterEditor.tsx
+│   └── RuleEditor.tsx
+├── nodes/           # 节点组件
+│   ├── ObjectTypeNode.tsx
+│   └── InterfaceNode.tsx
+└── ui/              # UI 组件
+    ├── Button.tsx
+    └── Input.tsx
+```
+
+### 3. 更新内容
+- 更新 `.cursorrules` 项目结构说明
+- 各子目录添加 `index.ts` 索引文件
+- 更新所有导入路径
+
+**代码改动：**
+- 修改 `src/components/panels/HelpGuide.tsx` - 添加图数据库和方法论章节
+- 新增 `src/components/panels/index.ts`
+- 新增 `src/components/editors/index.ts`
+- 新增 `src/components/nodes/index.ts`
+- 修改 `src/components/index.ts` - 重构导出结构
+- 修改 `src/App.tsx` - 更新导入路径
+- 修改 `.cursorrules` - 更新项目结构
+
+**状态标签：** ✅完成
+
+---

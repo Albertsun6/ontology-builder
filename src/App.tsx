@@ -1,15 +1,21 @@
 import { useState } from 'react';
 import { ReactFlowProvider } from '@xyflow/react';
+
+// Layout Components
 import Canvas from './components/Canvas';
 import Header from './components/Header';
 import Toolbar from './components/Toolbar';
 import Panel from './components/Panel';
-import ActionList from './components/ActionList';
-import HelpGuide from './components/HelpGuide';
-import { ChatlogViewer } from './components/ChatlogViewer';
-import { GraphDatabaseView } from './components/GraphDatabaseView';
+
+// Panel Components
+import HelpGuide from './components/panels/HelpGuide';
+import ActionList from './components/panels/ActionList';
+import { ChatlogViewer } from './components/panels/ChatlogViewer';
+import { GraphDatabaseView } from './components/panels/GraphDatabaseView';
+import { Methodology } from './components/panels/Methodology';
+
+// Menu
 import { FloatingMenu } from './components/FloatingMenu';
-import { Methodology } from './components/Methodology';
 
 function App() {
   const [showHelp, setShowHelp] = useState(false);

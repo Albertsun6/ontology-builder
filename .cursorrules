@@ -31,24 +31,38 @@
 
 ```
 src/
-├── components/          # React 组件
-│   ├── ui/              # 共享 UI 组件 (Button, Input 等)
-│   ├── nodes/           # React Flow 节点组件
-│   ├── Canvas.tsx       # 主画布组件
-│   ├── Panel.tsx        # 右侧编辑面板
-│   ├── Toolbar.tsx      # 左侧工具栏
-│   ├── Header.tsx       # 顶部导航
-│   ├── FloatingMenu.tsx # 右下角悬浮菜单
-│   ├── HelpGuide.tsx    # 使用帮助
-│   ├── ChatlogViewer.tsx # 对话记录
-│   ├── GraphDatabaseView.tsx # 图数据库视图
-│   ├── Methodology.tsx  # 开发方法论
-│   └── index.ts         # 组件导出索引
+├── components/              # React 组件
+│   ├── panels/              # 面板组件（侧边栏、弹窗）
+│   │   ├── HelpGuide.tsx       # 使用帮助
+│   │   ├── ChatlogViewer.tsx   # 对话记录
+│   │   ├── GraphDatabaseView.tsx # 图数据库视图
+│   │   ├── Methodology.tsx     # 开发方法论
+│   │   ├── ActionList.tsx      # 动作列表
+│   │   └── index.ts            # 面板组件导出
+│   ├── editors/             # 编辑器组件（表单编辑）
+│   │   ├── PropertyEditor.tsx  # 属性编辑器
+│   │   ├── ParameterEditor.tsx # 参数编辑器
+│   │   ├── RuleEditor.tsx      # 规则编辑器
+│   │   └── index.ts            # 编辑器组件导出
+│   ├── nodes/               # React Flow 节点组件
+│   │   ├── ObjectTypeNode.tsx  # 对象类型节点
+│   │   ├── InterfaceNode.tsx   # 接口节点
+│   │   └── index.ts            # 节点组件导出
+│   ├── ui/                  # 共享 UI 组件
+│   │   ├── Button.tsx          # 按钮组件
+│   │   ├── Input.tsx           # 输入组件
+│   │   └── index.ts            # UI 组件导出
+│   ├── Canvas.tsx           # 主画布组件
+│   ├── Panel.tsx            # 右侧编辑面板
+│   ├── Toolbar.tsx          # 左侧工具栏
+│   ├── Header.tsx           # 顶部导航
+│   ├── FloatingMenu.tsx     # 右下角悬浮菜单
+│   └── index.ts             # 主组件导出索引
 ├── store/
-│   └── ontologyStore.ts # Zustand 状态管理
+│   └── ontologyStore.ts     # Zustand 状态管理
 ├── types/
-│   └── ontology.ts      # TypeScript 类型定义
-└── App.tsx              # 应用入口
+│   └── ontology.ts          # TypeScript 类型定义
+└── App.tsx                  # 应用入口
 ```
 
 ---

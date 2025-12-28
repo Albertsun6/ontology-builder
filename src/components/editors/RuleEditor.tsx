@@ -26,8 +26,8 @@ import type {
   ObjectType,
   LinkType,
   Property,
-} from '../types/ontology';
-import { useOntologyStore } from '../store/ontologyStore';
+} from '../../types/ontology';
+import { useOntologyStore } from '../../store/ontologyStore';
 
 interface RuleEditorProps {
   rules: ActionRule[];

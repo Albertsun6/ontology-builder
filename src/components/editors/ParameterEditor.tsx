@@ -6,7 +6,7 @@ import {
   ChevronUpIcon,
   ChevronDownIcon,
 } from '@heroicons/react/24/outline';
-import type { ActionParameter, PropertyType } from '../types/ontology';
+import type { ActionParameter, PropertyType } from '../../types/ontology';
 
 interface ParameterEditorProps {
   parameters: ActionParameter[];
