@@ -1,0 +1,320 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800&f[]=satoshi@400,500,700&display=swap');
+
+@theme {
+  --color-onto-50: #f0f7ff;
+  --color-onto-100: #e0efff;
+  --color-onto-200: #b9dfff;
+  --color-onto-300: #7cc4ff;
+  --color-onto-400: #36a6ff;
+  --color-onto-500: #0c8aff;
+  --color-onto-600: #0069f5;
+  --color-onto-700: #0054d4;
+  --color-onto-800: #0347ab;
+  --color-onto-900: #0a3e8d;
+  --color-onto-950: #072756;
+  
+  --color-surface-50: #f8fafc;
+  --color-surface-100: #f1f5f9;
+  --color-surface-200: #e2e8f0;
+  --color-surface-300: #cbd5e1;
+  --color-surface-400: #94a3b8;
+  --color-surface-500: #64748b;
+  --color-surface-600: #475569;
+  --color-surface-700: #334155;
+  --color-surface-800: #1e293b;
+  --color-surface-900: #0f172a;
+  --color-surface-950: #020617;
+  
+  --font-display: 'Cabinet Grotesk', system-ui, sans-serif;
+  --font-body: 'Satoshi', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  
+  --animate-fade-in: fadeIn 0.3s ease-out;
+  --animate-slide-up: slideUp 0.3s ease-out;
+  --animate-slide-in-right: slideInRight 0.3s ease-out;
+  --animate-pulse-soft: pulseSoft 2s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes slideUp {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  0% { opacity: 0; transform: translateX(20px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulseSoft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+:root {
+  --color-bg: #0a0e17;
+  --color-surface: #111827;
+  --color-surface-elevated: #1e293b;
+  --color-border: #334155;
+  --color-text: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-primary: #0c8aff;
+  --color-primary-hover: #36a6ff;
+  --color-accent: #22d3ee;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  
+  /* Node colors */
+  --color-object: #6366f1;
+  --color-interface: #8b5cf6;
+  --color-link: #06b6d4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Satoshi', system-ui, -apple-system, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Canvas background pattern */
+.canvas-bg {
+  background-color: var(--color-bg);
+  background-image: 
+    radial-gradient(circle at 1px 1px, rgba(99, 102, 241, 0.15) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-secondary);
+}
+
+/* React Flow customizations */
+.react-flow__background {
+  background-color: var(--color-bg) !important;
+}
+
+.react-flow__controls {
+  background: var(--color-surface-elevated) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+.react-flow__controls-button {
+  background: var(--color-surface-elevated) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  fill: var(--color-text-secondary) !important;
+  transition: all 0.2s ease !important;
+}
+
+.react-flow__controls-button:hover {
+  background: var(--color-surface) !important;
+  fill: var(--color-text) !important;
+}
+
+.react-flow__minimap {
+  background: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+
+.react-flow__edge-path {
+  stroke-width: 2;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: var(--color-primary) !important;
+  stroke-width: 3;
+}
+
+/* Glow effect for selected nodes */
+.node-selected {
+  box-shadow: 0 0 0 2px var(--color-primary), 0 0 20px rgba(12, 138, 255, 0.3);
+}
+
+/* Panel animations */
+.panel-enter {
+  animation: slideInRight 0.3s ease-out;
+}
+
+.panel-exit {
+  animation: slideOutRight 0.2s ease-in forwards;
+}
+
+@keyframes slideOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+}
+
+/* Button styles */
+.btn-primary {
+  padding: 0.5rem 1rem;
+  background-color: var(--color-onto-600);
+  color: white;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.btn-primary:hover {
+  background-color: var(--color-onto-500);
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  padding: 0.5rem 1rem;
+  background-color: var(--color-surface-700);
+  color: var(--color-surface-200);
+  font-weight: 500;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--color-surface-600);
+}
+.btn-secondary:hover {
+  background-color: var(--color-surface-600);
+}
+
+.btn-danger {
+  padding: 0.5rem 1rem;
+  background-color: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+.btn-danger:hover {
+  background-color: rgba(239, 68, 68, 0.3);
+}
+
+/* Input styles */
+.input-field {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background-color: var(--color-surface-800);
+  border: 1px solid var(--color-surface-600);
+  border-radius: 0.5rem;
+  color: var(--color-surface-100);
+  transition: all 0.2s;
+}
+.input-field::placeholder {
+  color: var(--color-surface-500);
+}
+.input-field:focus {
+  outline: none;
+  border-color: var(--color-onto-500);
+  box-shadow: 0 0 0 1px var(--color-onto-500);
+}
+
+.input-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-surface-400);
+  margin-bottom: 0.375rem;
+}
+
+/* Select styles */
+.select-field {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background-color: var(--color-surface-800);
+  border: 1px solid var(--color-surface-600);
+  border-radius: 0.5rem;
+  color: var(--color-surface-100);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.select-field:focus {
+  outline: none;
+  border-color: var(--color-onto-500);
+  box-shadow: 0 0 0 1px var(--color-onto-500);
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(17, 24, 39, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Property type badges */
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  border-radius: 0.25rem;
+}
+
+.type-string { background-color: rgba(34, 197, 94, 0.2); color: #4ade80; }
+.type-number { background-color: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+.type-boolean { background-color: rgba(234, 179, 8, 0.2); color: #facc15; }
+.type-date { background-color: rgba(168, 85, 247, 0.2); color: #c084fc; }
+.type-datetime { background-color: rgba(236, 72, 153, 0.2); color: #f472b6; }
+.type-array { background-color: rgba(249, 115, 22, 0.2); color: #fb923c; }
+.type-object { background-color: rgba(99, 102, 241, 0.2); color: #818cf8; }
+.type-reference { background-color: rgba(6, 182, 212, 0.2); color: #22d3ee; }
