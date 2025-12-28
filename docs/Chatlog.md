@@ -172,3 +172,34 @@
 **状态标签：** ✅完成
 
 ---
+
+## 代码优化与使用说明
+
+**时间戳：** 2025-12-29 03:55
+
+**对话标题：** 优化代码结构，添加使用说明
+
+**用户需求：**
+优化代码结构，并在前端生成使用说明
+
+**解决方案：**
+1. 创建共享 UI 组件库（`src/components/ui/`）
+   - Button 组件：支持多种变体和尺寸
+   - Input/Textarea/Select 组件：统一表单样式
+2. 创建 HelpGuide 使用说明组件
+   - 6个章节：概述、对象类型、链接类型、动作、画布操作、导入导出
+   - 右下角帮助按钮，点击打开帮助面板
+   - 侧边栏导航，内容详尽
+3. 创建组件索引文件优化导入
+
+**代码改动：**
+- 新增 `src/components/ui/Button.tsx` - 按钮组件
+- 新增 `src/components/ui/Input.tsx` - 表单输入组件
+- 新增 `src/components/ui/index.ts` - UI 组件导出
+- 新增 `src/components/HelpGuide.tsx` - 使用说明组件
+- 新增 `src/components/index.ts` - 组件索引
+- 修改 `src/App.tsx` - 添加 HelpGuide
+
+**状态标签：** ✅完成
+
+---

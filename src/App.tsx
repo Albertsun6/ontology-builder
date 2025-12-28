@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Toolbar from './components/Toolbar';
 import Panel from './components/Panel';
 import ActionList from './components/ActionList';
+import HelpGuide from './components/HelpGuide';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Toolbar />
         <Panel />
         <ActionList />
+        <HelpGuide />
       </div>
     </ReactFlowProvider>
   );
