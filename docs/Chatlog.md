@@ -753,3 +753,62 @@ components/
 **状态标签：** ✅完成
 
 ---
+
+## 代码优化和结构化处理
+
+**时间戳：** 2025-12-29 07:30
+
+**对话标题：** 项目代码优化和结构化处理
+
+**用户需求：**
+项目是不是很大了，需要做代码优化和结构化处理吗？如果需要，执行
+
+**解决方案：**
+
+### 1. 优化效果统计
+
+| 指标 | 优化前 | 优化后 | 减少 |
+|------|--------|--------|------|
+| 代码行数 | 9,882 | 8,579 | ~13% |
+| ontologyStore.ts | 1,054 行 | 498 行 | ~53% |
+| 主包大小 | ~800KB | ~567KB | ~30% |
+| 文件数量 | 30 | 29 | 1 |
+
+### 2. 删除重复文件
+
+- 删除 `src/components/HelpGuide.tsx`（与 `panels/HelpGuide.tsx` 完全重复）
+
+### 3. 优化 ontologyStore.ts
+
+- 移除旧的电商 demo 数据（约 550 行）
+- 统一使用 `tradeErpDemo.ts` 作为默认数据
+- reset 功能也使用公司管理系统数据
+
+### 4. 代码分割 (Code Splitting)
+
+使用 React.lazy 延迟加载大型面板组件：
+
+| 组件 | 拆分后大小 |
+|------|-----------|
+| ChatlogViewer | 132KB |
+| GraphDatabaseView | 45KB |
+| HelpGuide | 34KB |
+| Methodology | 13KB |
+
+只在用户打开面板时才加载这些组件，减少初始加载时间。
+
+### 5. 其他改进
+
+- 添加 `PanelLoader` 加载占位符组件
+- 条件渲染优化，只在面板打开时挂载组件
+- 更新存储版本号触发数据迁移
+
+**代码改动：**
+- 删除 `src/components/HelpGuide.tsx` - 重复文件
+- 修改 `src/store/ontologyStore.ts` - 移除旧 demo 数据
+- 修改 `src/App.tsx` - 添加代码分割
+- 修改 `src/components/panels/ChatlogViewer.tsx` - 添加 default export
+
+**状态标签：** ✅完成
+
+---
