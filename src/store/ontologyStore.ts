@@ -1013,10 +1013,10 @@ export const useOntologyStore = create<OntologyState>()(
     }),
     {
       name: 'ontology-storage',
-      version: 6, // Increment this to reset storage and load demo data
+      version: 7, // Increment this to reset storage and load demo data
       migrate: (persistedState: unknown, version: number) => {
         // If old version or no nodes, return Trade ERP demo data
-        if (version < 6) {
+        if (version < 7) {
           return {
             ontology: tradeErpOntology,
             nodes: tradeErpNodes,

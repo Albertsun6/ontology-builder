@@ -1071,81 +1071,83 @@ export const tradeErpActions: Action[] = [
 // ============================================
 export const tradeErpNodes: OntologyNode[] = [
   // ===============================================
-  // 顶部区域 (y: 0) - 基础数据 & 接口
+  // 顶部区域 (y: 0) - 接口定义
   // ===============================================
-  { id: IDS.DEPARTMENT, type: 'objectType', position: { x: 50, y: 0 }, data: tradeErpObjectTypes[0] },
-  { id: IDS.EMPLOYEE, type: 'objectType', position: { x: 280, y: 0 }, data: tradeErpObjectTypes[1] },
-  { id: IDS.CURRENCY, type: 'objectType', position: { x: 510, y: 0 }, data: tradeErpObjectTypes[2] },
-  { id: IDS.EXCHANGE_RATE, type: 'objectType', position: { x: 740, y: 0 }, data: tradeErpObjectTypes[25] },
-  { id: IDS.AUDITABLE, type: 'interface', position: { x: 1050, y: 0 }, data: tradeErpInterfaces[0] },
-  { id: IDS.APPROVABLE, type: 'interface', position: { x: 1280, y: 0 }, data: tradeErpInterfaces[1] },
+  { id: IDS.AUDITABLE, type: 'interface', position: { x: 800, y: 0 }, data: tradeErpInterfaces[0] },
+  { id: IDS.APPROVABLE, type: 'interface', position: { x: 1100, y: 0 }, data: tradeErpInterfaces[1] },
 
   // ===============================================
-  // 左侧区域 (x: 0-350) - 销售线：客户 → 销售 → 应收
+  // 第一行 (y: 200) - 基础数据 + 主体
   // ===============================================
-  // 客户
-  { id: IDS.CUSTOMER, type: 'objectType', position: { x: 50, y: 180 }, data: tradeErpObjectTypes[3] },
-  { id: IDS.CUSTOMER_CONTACT, type: 'objectType', position: { x: 280, y: 180 }, data: tradeErpObjectTypes[4] },
-  // 销售流程
-  { id: IDS.SALES_QUOTATION, type: 'objectType', position: { x: 50, y: 340 }, data: tradeErpObjectTypes[12] },
-  { id: IDS.SALES_ORDER, type: 'objectType', position: { x: 280, y: 340 }, data: tradeErpObjectTypes[13] },
-  { id: IDS.SALES_SHIPMENT, type: 'objectType', position: { x: 50, y: 500 }, data: tradeErpObjectTypes[14] },
-  // 应收财务
-  { id: IDS.RECEIVABLE, type: 'objectType', position: { x: 50, y: 660 }, data: tradeErpObjectTypes[17] },
-  { id: IDS.PAYMENT_RECEIPT, type: 'objectType', position: { x: 280, y: 660 }, data: tradeErpObjectTypes[19] },
+  { id: IDS.DEPARTMENT, type: 'objectType', position: { x: 0, y: 200 }, data: tradeErpObjectTypes[0] },
+  { id: IDS.EMPLOYEE, type: 'objectType', position: { x: 300, y: 200 }, data: tradeErpObjectTypes[1] },
+  { id: IDS.CUSTOMER, type: 'objectType', position: { x: 600, y: 200 }, data: tradeErpObjectTypes[3] },
+  { id: IDS.CUSTOMER_CONTACT, type: 'objectType', position: { x: 900, y: 200 }, data: tradeErpObjectTypes[4] },
+  { id: IDS.SUPPLIER, type: 'objectType', position: { x: 1200, y: 200 }, data: tradeErpObjectTypes[5] },
+  { id: IDS.SUPPLIER_CONTACT, type: 'objectType', position: { x: 1500, y: 200 }, data: tradeErpObjectTypes[6] },
 
   // ===============================================
-  // 中间区域 (x: 500-800) - 产品/库存/物流
+  // 第二行 (y: 400) - 产品 & 询价/报价
   // ===============================================
-  // 产品
-  { id: IDS.PRODUCT, type: 'objectType', position: { x: 550, y: 180 }, data: tradeErpObjectTypes[7] },
-  { id: IDS.PRODUCT_CATEGORY, type: 'objectType', position: { x: 780, y: 180 }, data: tradeErpObjectTypes[8] },
-  // 库存
-  { id: IDS.WAREHOUSE, type: 'objectType', position: { x: 550, y: 340 }, data: tradeErpObjectTypes[15] },
-  { id: IDS.INVENTORY, type: 'objectType', position: { x: 780, y: 340 }, data: tradeErpObjectTypes[16] },
-  // 物流
-  { id: IDS.LOGISTICS_COMPANY, type: 'objectType', position: { x: 550, y: 500 }, data: tradeErpObjectTypes[22] },
-  { id: IDS.TRANSPORT_ORDER, type: 'objectType', position: { x: 780, y: 500 }, data: tradeErpObjectTypes[23] },
-  // 外贸/发票
-  { id: IDS.CUSTOMS_DECLARATION, type: 'objectType', position: { x: 550, y: 660 }, data: tradeErpObjectTypes[24] },
-  { id: IDS.INVOICE, type: 'objectType', position: { x: 780, y: 660 }, data: tradeErpObjectTypes[21] },
+  { id: IDS.PRODUCT_CATEGORY, type: 'objectType', position: { x: 0, y: 400 }, data: tradeErpObjectTypes[8] },
+  { id: IDS.PRODUCT, type: 'objectType', position: { x: 300, y: 400 }, data: tradeErpObjectTypes[7] },
+  { id: IDS.SALES_QUOTATION, type: 'objectType', position: { x: 600, y: 400 }, data: tradeErpObjectTypes[12] },
+  { id: IDS.CURRENCY, type: 'objectType', position: { x: 900, y: 400 }, data: tradeErpObjectTypes[2] },
+  { id: IDS.PURCHASE_INQUIRY, type: 'objectType', position: { x: 1200, y: 400 }, data: tradeErpObjectTypes[9] },
+  { id: IDS.EXCHANGE_RATE, type: 'objectType', position: { x: 1500, y: 400 }, data: tradeErpObjectTypes[25] },
 
   // ===============================================
-  // 右侧区域 (x: 1050-1350) - 采购线：供应商 → 采购 → 应付
+  // 第三行 (y: 600) - 订单
   // ===============================================
-  // 供应商
-  { id: IDS.SUPPLIER, type: 'objectType', position: { x: 1050, y: 180 }, data: tradeErpObjectTypes[5] },
-  { id: IDS.SUPPLIER_CONTACT, type: 'objectType', position: { x: 1280, y: 180 }, data: tradeErpObjectTypes[6] },
-  // 采购流程
-  { id: IDS.PURCHASE_INQUIRY, type: 'objectType', position: { x: 1050, y: 340 }, data: tradeErpObjectTypes[9] },
-  { id: IDS.PURCHASE_ORDER, type: 'objectType', position: { x: 1280, y: 340 }, data: tradeErpObjectTypes[10] },
-  { id: IDS.PURCHASE_RECEIPT, type: 'objectType', position: { x: 1050, y: 500 }, data: tradeErpObjectTypes[11] },
-  // 应付财务
-  { id: IDS.PAYABLE, type: 'objectType', position: { x: 1050, y: 660 }, data: tradeErpObjectTypes[18] },
-  { id: IDS.PAYMENT_VOUCHER, type: 'objectType', position: { x: 1280, y: 660 }, data: tradeErpObjectTypes[20] },
+  { id: IDS.WAREHOUSE, type: 'objectType', position: { x: 0, y: 600 }, data: tradeErpObjectTypes[15] },
+  { id: IDS.INVENTORY, type: 'objectType', position: { x: 300, y: 600 }, data: tradeErpObjectTypes[16] },
+  { id: IDS.SALES_ORDER, type: 'objectType', position: { x: 600, y: 600 }, data: tradeErpObjectTypes[13] },
+  { id: IDS.INVOICE, type: 'objectType', position: { x: 900, y: 600 }, data: tradeErpObjectTypes[21] },
+  { id: IDS.PURCHASE_ORDER, type: 'objectType', position: { x: 1200, y: 600 }, data: tradeErpObjectTypes[10] },
 
   // ===============================================
-  // 最右区域 (x: 1600+) - 拍卖系统
+  // 第四行 (y: 800) - 发货/入库
   // ===============================================
-  // 委托管理 (拍卖起点)
-  { id: IDS.CONSIGNOR, type: 'objectType', position: { x: 1600, y: 180 }, data: tradeErpObjectTypes[26] },
-  { id: IDS.CONSIGNMENT_CONTRACT, type: 'objectType', position: { x: 1830, y: 180 }, data: tradeErpObjectTypes[27] },
-  // 拍品管理
-  { id: IDS.AUCTION_ITEM, type: 'objectType', position: { x: 2060, y: 180 }, data: tradeErpObjectTypes[28] },
-  { id: IDS.AUCTION_CATEGORY, type: 'objectType', position: { x: 2290, y: 180 }, data: tradeErpObjectTypes[29] },
-  { id: IDS.APPRAISAL, type: 'objectType', position: { x: 2060, y: 340 }, data: tradeErpObjectTypes[30] },
-  // 拍卖活动
-  { id: IDS.AUCTION_EVENT, type: 'objectType', position: { x: 1600, y: 340 }, data: tradeErpObjectTypes[31] },
-  { id: IDS.AUCTION_SESSION, type: 'objectType', position: { x: 1830, y: 340 }, data: tradeErpObjectTypes[32] },
-  { id: IDS.AUCTION_LOT, type: 'objectType', position: { x: 2060, y: 500 }, data: tradeErpObjectTypes[33] },
-  // 竞拍管理
-  { id: IDS.BIDDER, type: 'objectType', position: { x: 1600, y: 500 }, data: tradeErpObjectTypes[34] },
-  { id: IDS.DEPOSIT, type: 'objectType', position: { x: 1830, y: 500 }, data: tradeErpObjectTypes[36] },
-  { id: IDS.BID, type: 'objectType', position: { x: 2290, y: 500 }, data: tradeErpObjectTypes[35] },
-  // 成交结算
-  { id: IDS.AUCTION_RESULT, type: 'objectType', position: { x: 1600, y: 660 }, data: tradeErpObjectTypes[37] },
-  { id: IDS.SETTLEMENT, type: 'objectType', position: { x: 1830, y: 660 }, data: tradeErpObjectTypes[38] },
-  { id: IDS.COMMISSION, type: 'objectType', position: { x: 2060, y: 660 }, data: tradeErpObjectTypes[39] },
+  { id: IDS.LOGISTICS_COMPANY, type: 'objectType', position: { x: 0, y: 800 }, data: tradeErpObjectTypes[22] },
+  { id: IDS.TRANSPORT_ORDER, type: 'objectType', position: { x: 300, y: 800 }, data: tradeErpObjectTypes[23] },
+  { id: IDS.SALES_SHIPMENT, type: 'objectType', position: { x: 600, y: 800 }, data: tradeErpObjectTypes[14] },
+  { id: IDS.CUSTOMS_DECLARATION, type: 'objectType', position: { x: 900, y: 800 }, data: tradeErpObjectTypes[24] },
+  { id: IDS.PURCHASE_RECEIPT, type: 'objectType', position: { x: 1200, y: 800 }, data: tradeErpObjectTypes[11] },
+
+  // ===============================================
+  // 第五行 (y: 1000) - 财务
+  // ===============================================
+  { id: IDS.RECEIVABLE, type: 'objectType', position: { x: 300, y: 1000 }, data: tradeErpObjectTypes[17] },
+  { id: IDS.PAYMENT_RECEIPT, type: 'objectType', position: { x: 600, y: 1000 }, data: tradeErpObjectTypes[19] },
+  { id: IDS.PAYABLE, type: 'objectType', position: { x: 900, y: 1000 }, data: tradeErpObjectTypes[18] },
+  { id: IDS.PAYMENT_VOUCHER, type: 'objectType', position: { x: 1200, y: 1000 }, data: tradeErpObjectTypes[20] },
+
+  // ===============================================
+  // 拍卖系统 (x: 2000+) - 独立区域
+  // ===============================================
+  // 第一行 - 委托
+  { id: IDS.CONSIGNOR, type: 'objectType', position: { x: 2000, y: 200 }, data: tradeErpObjectTypes[26] },
+  { id: IDS.CONSIGNMENT_CONTRACT, type: 'objectType', position: { x: 2300, y: 200 }, data: tradeErpObjectTypes[27] },
+  { id: IDS.AUCTION_CATEGORY, type: 'objectType', position: { x: 2600, y: 200 }, data: tradeErpObjectTypes[29] },
+  
+  // 第二行 - 拍品
+  { id: IDS.AUCTION_ITEM, type: 'objectType', position: { x: 2000, y: 400 }, data: tradeErpObjectTypes[28] },
+  { id: IDS.APPRAISAL, type: 'objectType', position: { x: 2300, y: 400 }, data: tradeErpObjectTypes[30] },
+  
+  // 第三行 - 拍卖活动
+  { id: IDS.AUCTION_EVENT, type: 'objectType', position: { x: 2000, y: 600 }, data: tradeErpObjectTypes[31] },
+  { id: IDS.AUCTION_SESSION, type: 'objectType', position: { x: 2300, y: 600 }, data: tradeErpObjectTypes[32] },
+  { id: IDS.AUCTION_LOT, type: 'objectType', position: { x: 2600, y: 600 }, data: tradeErpObjectTypes[33] },
+  
+  // 第四行 - 竞拍
+  { id: IDS.BIDDER, type: 'objectType', position: { x: 2000, y: 800 }, data: tradeErpObjectTypes[34] },
+  { id: IDS.DEPOSIT, type: 'objectType', position: { x: 2300, y: 800 }, data: tradeErpObjectTypes[36] },
+  { id: IDS.BID, type: 'objectType', position: { x: 2600, y: 800 }, data: tradeErpObjectTypes[35] },
+  
+  // 第五行 - 成交结算
+  { id: IDS.AUCTION_RESULT, type: 'objectType', position: { x: 2000, y: 1000 }, data: tradeErpObjectTypes[37] },
+  { id: IDS.SETTLEMENT, type: 'objectType', position: { x: 2300, y: 1000 }, data: tradeErpObjectTypes[38] },
+  { id: IDS.COMMISSION, type: 'objectType', position: { x: 2600, y: 1000 }, data: tradeErpObjectTypes[39] },
 ];
 
 // ============================================
