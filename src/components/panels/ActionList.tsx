@@ -58,9 +58,9 @@ export default function ActionList() {
           />
           
           {/* Panel */}
-          <div className="fixed right-0 top-0 bottom-0 w-[380px] z-[70] glass border-l border-surface-700 animate-slide-in-right">
+          <div className="fixed right-0 top-0 bottom-0 w-[380px] z-[70] glass border-l border-surface-700 animate-slide-in-right flex flex-col">
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-surface-700">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-surface-700 flex-shrink-0">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center">
                   <BoltIcon className="w-5 h-5 text-yellow-500" />
@@ -79,7 +79,7 @@ export default function ActionList() {
             </div>
 
             {/* Action List */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-3">
               {actions.length === 0 ? (
                 <div className="text-center py-12">
                   <BoltIcon className="w-12 h-12 text-surface-600 mx-auto mb-3" />
