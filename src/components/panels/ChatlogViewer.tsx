@@ -502,3 +502,5 @@ export const ChatlogViewer = ({ isOpen: externalIsOpen, onClose, showTrigger = f
     </>
   );
 };
+
+export default ChatlogViewer;

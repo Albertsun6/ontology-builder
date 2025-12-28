@@ -1,21 +1,31 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { ReactFlowProvider } from '@xyflow/react';
 
-// Layout Components
+// Layout Components - Always loaded
 import Canvas from './components/Canvas';
 import Header from './components/Header';
 import Toolbar from './components/Toolbar';
 import Panel from './components/Panel';
-
-// Panel Components
-import HelpGuide from './components/panels/HelpGuide';
 import ActionList from './components/panels/ActionList';
-import { ChatlogViewer } from './components/panels/ChatlogViewer';
-import { GraphDatabaseView } from './components/panels/GraphDatabaseView';
-import { Methodology } from './components/panels/Methodology';
-
-// Menu
 import { FloatingMenu } from './components/FloatingMenu';
+
+// Lazy loaded panel components - Only loaded when needed
+const HelpGuide = lazy(() => import('./components/panels/HelpGuide'));
+const ChatlogViewer = lazy(() => import('./components/panels/ChatlogViewer'));
+const GraphDatabaseView = lazy(() => import('./components/panels/GraphDatabaseView'));
+const Methodology = lazy(() => import('./components/panels/Methodology'));
+
+// Loading fallback for lazy components
+function PanelLoader() {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-10 h-10 border-4 border-violet-500 border-t-transparent rounded-full animate-spin" />
+        <span className="text-gray-400 text-sm">加载中...</span>
+      </div>
+    </div>
+  );
+}
 
 function App() {
   const [showHelp, setShowHelp] = useState(false);
@@ -42,23 +52,33 @@ function App() {
           onOpenMethodology={() => setShowMethodology(true)}
         />
         
-        {/* 各面板 - 由 FloatingMenu 控制 */}
-        <HelpGuide 
-          isOpen={showHelp} 
-          onClose={() => setShowHelp(false)} 
-        />
-        <ChatlogViewer 
-          isOpen={showChatlog} 
-          onClose={() => setShowChatlog(false)} 
-        />
-        <GraphDatabaseView 
-          isOpen={showGraphDB} 
-          onClose={() => setShowGraphDB(false)} 
-        />
-        <Methodology
-          isOpen={showMethodology}
-          onClose={() => setShowMethodology(false)}
-        />
+        {/* 延迟加载的面板组件 */}
+        <Suspense fallback={<PanelLoader />}>
+          {showHelp && (
+            <HelpGuide 
+              isOpen={showHelp} 
+              onClose={() => setShowHelp(false)} 
+            />
+          )}
+          {showChatlog && (
+            <ChatlogViewer 
+              isOpen={showChatlog} 
+              onClose={() => setShowChatlog(false)} 
+            />
+          )}
+          {showGraphDB && (
+            <GraphDatabaseView 
+              isOpen={showGraphDB} 
+              onClose={() => setShowGraphDB(false)} 
+            />
+          )}
+          {showMethodology && (
+            <Methodology
+              isOpen={showMethodology}
+              onClose={() => setShowMethodology(false)}
+            />
+          )}
+        </Suspense>
       </div>
     </ReactFlowProvider>
   );
