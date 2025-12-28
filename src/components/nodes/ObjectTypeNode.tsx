@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Handle, Position, type NodeProps } from '@xyflow/react';
-import { CubeIcon, KeyIcon } from '@heroicons/react/24/outline';
+import { CubeIcon, KeyIcon, BoltIcon } from '@heroicons/react/24/outline';
 import type { ObjectType } from '../../types/ontology';
 import { useOntologyStore } from '../../store/ontologyStore';
 
@@ -11,6 +11,10 @@ interface ObjectTypeNodeProps extends NodeProps {
 const ObjectTypeNode = memo(({ data, selected }: ObjectTypeNodeProps) => {
   const setSelectedNode = useOntologyStore((state) => state.setSelectedNode);
   const openPanel = useOntologyStore((state) => state.openPanel);
+  const ontology = useOntologyStore((state) => state.ontology);
+  
+  // 获取关联到这个对象类型的动作
+  const relatedActions = ontology?.actions.filter(a => a.objectTypeId === data.id) || [];
 
   const handleDoubleClick = () => {
     setSelectedNode(data.id);
@@ -101,6 +105,26 @@ const ObjectTypeNode = memo(({ data, selected }: ObjectTypeNodeProps) => {
                 className="px-2 py-0.5 text-xs bg-purple-500/20 text-purple-400 rounded-full"
               >
                 {iface}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Actions */}
+      {relatedActions.length > 0 && (
+        <div className="px-4 pb-3 border-t border-surface-700 pt-2">
+          <div className="flex items-center gap-1.5 mb-1.5">
+            <BoltIcon className="w-3.5 h-3.5 text-yellow-500" />
+            <span className="text-xs text-surface-400 font-medium">动作</span>
+          </div>
+          <div className="flex flex-wrap gap-1">
+            {relatedActions.map((action) => (
+              <span 
+                key={action.id}
+                className="px-2 py-0.5 text-xs bg-yellow-500/20 text-yellow-400 rounded-full"
+              >
+                {action.displayName}
               </span>
             ))}
           </div>

@@ -3,6 +3,7 @@ import Canvas from './components/Canvas';
 import Header from './components/Header';
 import Toolbar from './components/Toolbar';
 import Panel from './components/Panel';
+import ActionList from './components/ActionList';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         </main>
         <Toolbar />
         <Panel />
+        <ActionList />
       </div>
     </ReactFlowProvider>
   );
