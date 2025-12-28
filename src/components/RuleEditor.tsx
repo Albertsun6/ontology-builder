@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import {
-  PlusIcon,
   TrashIcon,
   ChevronUpIcon,
   ChevronDownIcon,
@@ -23,6 +22,10 @@ import type {
   ValidationConfig,
   WebhookConfig,
   NotificationConfig,
+  Ontology,
+  ObjectType,
+  LinkType,
+  Property,
 } from '../types/ontology';
 import { useOntologyStore } from '../store/ontologyStore';
 
@@ -273,10 +276,10 @@ function RuleConfigEditor({
   rule: ActionRule;
   onChange: (config: ActionRuleConfig) => void;
   objectTypeId: string;
-  ontology: typeof useOntologyStore.prototype.ontology;
+  ontology: Ontology | null;
 }) {
   const config = rule.config;
-  const currentObjectType = ontology?.objectTypes.find(ot => ot.id === objectTypeId);
+  const currentObjectType = ontology?.objectTypes.find((ot: ObjectType) => ot.id === objectTypeId);
 
   switch (config.type) {
     case 'create_object':
@@ -291,7 +294,7 @@ function RuleConfigEditor({
               className="select-field text-sm"
             >
               <option value="">选择要创建的对象类型</option>
-              {ontology?.objectTypes.map((ot) => (
+              {ontology?.objectTypes.map((ot: ObjectType) => (
                 <option key={ot.id} value={ot.id}>{ot.displayName}</option>
               ))}
             </select>
@@ -314,7 +317,7 @@ function RuleConfigEditor({
               className="select-field text-sm"
             >
               <option value="">选择要更新的属性</option>
-              {currentObjectType?.properties.map((prop) => (
+              {currentObjectType?.properties.map((prop: Property) => (
                 <option key={prop.id} value={prop.name}>{prop.displayName}</option>
               ))}
             </select>
@@ -357,8 +360,8 @@ function RuleConfigEditor({
             >
               <option value="">选择链接类型</option>
               {ontology?.linkTypes
-                .filter(lt => lt.sourceObjectTypeId === objectTypeId || lt.targetObjectTypeId === objectTypeId)
-                .map((lt) => (
+                .filter((lt: LinkType) => lt.sourceObjectTypeId === objectTypeId || lt.targetObjectTypeId === objectTypeId)
+                .map((lt: LinkType) => (
                   <option key={lt.id} value={lt.id}>{lt.displayName}</option>
                 ))}
             </select>

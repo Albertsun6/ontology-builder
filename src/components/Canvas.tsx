@@ -39,22 +39,19 @@ export default function Canvas() {
   const {
     nodes: storeNodes,
     edges: storeEdges,
-    setNodes: setStoreNodes,
-    setEdges: setStoreEdges,
     setSelectedNode,
     setSelectedEdge,
     updateNodePosition,
     addLinkType,
     openPanel,
-    ontology,
   } = useOntologyStore();
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(storeNodes as Node[]);
+  const [nodes, setNodes, onNodesChange] = useNodesState(storeNodes as unknown as Node[]);
   const [edges, setEdges, onEdgesChange] = useEdgesState(storeEdges as Edge[]);
 
   // Sync with store when store changes
   useMemo(() => {
-    setNodes(storeNodes as Node[]);
+    setNodes(storeNodes as unknown as Node[]);
   }, [storeNodes, setNodes]);
 
   useMemo(() => {

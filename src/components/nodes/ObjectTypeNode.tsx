@@ -1,11 +1,12 @@
 import { memo } from 'react';
-import { Handle, Position, type NodeProps } from '@xyflow/react';
+import { Handle, Position } from '@xyflow/react';
 import { CubeIcon, KeyIcon, BoltIcon } from '@heroicons/react/24/outline';
 import type { ObjectType } from '../../types/ontology';
 import { useOntologyStore } from '../../store/ontologyStore';
 
-interface ObjectTypeNodeProps extends NodeProps {
+interface ObjectTypeNodeProps {
   data: ObjectType;
+  selected?: boolean;
 }
 
 const ObjectTypeNode = memo(({ data, selected }: ObjectTypeNodeProps) => {

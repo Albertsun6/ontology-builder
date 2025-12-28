@@ -7,14 +7,12 @@ import {
   ArrowDownTrayIcon,
   ArrowUpTrayIcon,
   TrashIcon,
-  Cog6ToothIcon,
   SparklesIcon,
 } from '@heroicons/react/24/outline';
 import { useOntologyStore } from '../store/ontologyStore';
 
 export default function Toolbar() {
   const { ontology, openPanel, exportOntology, importOntology, reset } = useOntologyStore();
-  const [showExportModal, setShowExportModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
   const [importData, setImportData] = useState('');
 

@@ -1,6 +1,4 @@
-import { useState } from 'react';
 import { 
-  ChevronDownIcon, 
   DocumentTextIcon,
   ClockIcon,
 } from '@heroicons/react/24/outline';
@@ -8,7 +6,6 @@ import { useOntologyStore } from '../store/ontologyStore';
 
 export default function Header() {
   const { ontology } = useOntologyStore();
-  const [isEditing, setIsEditing] = useState(false);
 
   if (!ontology) return null;
 

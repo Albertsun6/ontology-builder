@@ -4,7 +4,7 @@ import { useOntologyStore } from '../store/ontologyStore';
 import PropertyEditor from './PropertyEditor';
 import ParameterEditor from './ParameterEditor';
 import RuleEditor from './RuleEditor';
-import type { Property, ObjectType, Interface, LinkType, Action, ActionParameter, ActionRule } from '../types/ontology';
+import type { Property, ActionParameter, ActionRule } from '../types/ontology';
 
 // Color options for objects
 const colorOptions = [
@@ -30,19 +30,6 @@ export default function Panel() {
     selectedNodeId,
     selectedEdgeId,
     selectedActionId,
-    ontology,
-    addObjectType,
-    updateObjectType,
-    deleteObjectType,
-    addInterface,
-    updateInterface,
-    deleteInterface,
-    addLinkType,
-    updateLinkType,
-    deleteLinkType,
-    addAction,
-    updateAction,
-    deleteAction,
   } = useOntologyStore();
 
   if (!isPanelOpen || !panelType) return null;
