@@ -609,7 +609,7 @@ const demoEdges: OntologyEdge[] = [
   { id: 'link-order-employee', source: ORDER_ID, target: EMPLOYEE_ID, type: 'link', data: demoLinkTypes[3], label: '订单处理人' },
 ];
 
-// Initial Ontology with Demo Data
+// Initial Ontology with Demo Data (E-commerce - kept for reference)
 const demoOntology: Ontology = {
   id: 'demo-ontology',
   name: '电商系统本体',
@@ -623,14 +623,24 @@ const demoOntology: Ontology = {
   updatedAt: now(),
 };
 
-const initialOntology: Ontology = demoOntology;
+// Import Trade ERP Demo Data
+import { 
+  tradeErpOntology, 
+  tradeErpNodes, 
+  tradeErpEdges 
+} from './tradeErpDemo';
+
+// Use Trade ERP as default
+const initialOntology: Ontology = tradeErpOntology;
+const initialNodes: OntologyNode[] = tradeErpNodes;
+const initialEdges: OntologyEdge[] = tradeErpEdges;
 
 export const useOntologyStore = create<OntologyState>()(
   persist(
     (set, get) => ({
       ontology: initialOntology,
-      nodes: demoNodes,
-      edges: demoEdges,
+      nodes: initialNodes,
+      edges: initialEdges,
       selectedNodeId: null,
       selectedEdgeId: null,
       selectedActionId: null,
@@ -1003,14 +1013,14 @@ export const useOntologyStore = create<OntologyState>()(
     }),
     {
       name: 'ontology-storage',
-      version: 3, // Increment this to reset storage and load demo data
+      version: 4, // Increment this to reset storage and load demo data
       migrate: (persistedState: unknown, version: number) => {
-        // If old version or no nodes, return demo data
-        if (version < 3) {
+        // If old version or no nodes, return Trade ERP demo data
+        if (version < 4) {
           return {
-            ontology: demoOntology,
-            nodes: demoNodes,
-            edges: demoEdges,
+            ontology: tradeErpOntology,
+            nodes: tradeErpNodes,
+            edges: tradeErpEdges,
             selectedNodeId: null,
             selectedEdgeId: null,
             selectedActionId: null,

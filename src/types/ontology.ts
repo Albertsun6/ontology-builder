@@ -50,7 +50,7 @@ export interface LinkType {
   description?: string;
   sourceObjectTypeId: string;
   targetObjectTypeId: string;
-  cardinality: 'one-to-one' | 'one-to-many' | 'many-to-many';
+  cardinality: 'one-to-one' | 'one-to-many' | 'many-to-one' | 'many-to-many';
   sourceRole?: string;
   targetRole?: string;
   properties?: Property[];
@@ -134,7 +134,7 @@ export interface UpdatePropertyConfig {
 export interface CreateLinkConfig {
   type: 'create_link';
   linkTypeId: string;  // 链接类型
-  targetSource: 'parameter' | 'created_object' | 'expression';
+  targetSource: 'parameter' | 'created_object' | 'expression' | 'source';
   targetValue: string;
 }
 
@@ -168,7 +168,7 @@ export interface NotificationConfig {
 
 export interface PropertyMapping {
   targetProperty: string;  // 目标对象的属性
-  sourceType: 'parameter' | 'source_property' | 'expression' | 'constant';
+  sourceType: 'parameter' | 'source_property' | 'property' | 'expression' | 'constant';
   sourceValue: string;
 }
 

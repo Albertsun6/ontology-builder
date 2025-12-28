@@ -365,7 +365,7 @@ function LinkTypePanel({
   const [description, setDescription] = useState(existingLink?.description || '');
   const [sourceObjectTypeId, setSourceObjectTypeId] = useState(existingLink?.sourceObjectTypeId || '');
   const [targetObjectTypeId, setTargetObjectTypeId] = useState(existingLink?.targetObjectTypeId || '');
-  const [cardinality, setCardinality] = useState<'one-to-one' | 'one-to-many' | 'many-to-many'>(
+  const [cardinality, setCardinality] = useState<'one-to-one' | 'one-to-many' | 'many-to-one' | 'many-to-many'>(
     existingLink?.cardinality || 'one-to-many'
   );
 
@@ -490,6 +490,7 @@ function LinkTypePanel({
             >
               <option value="one-to-one">一对一</option>
               <option value="one-to-many">一对多</option>
+              <option value="many-to-one">多对一</option>
               <option value="many-to-many">多对多</option>
             </select>
           </div>
