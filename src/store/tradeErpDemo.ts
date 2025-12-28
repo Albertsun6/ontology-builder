@@ -1,9 +1,23 @@
 /**
- * 贸易公司 ERP + 拍卖系统 - 本体模型
- * Trade Company ERP + Auction System Ontology Model
+ * 公司管理系统 - 本体模型
+ * Company Management System Ontology Model
+ * 
+ * 布局设计:
+ * ┌─────────────────────────────────────────────────────────────────────────────┐
+ * │  [顶部] 基础数据：部门、员工、币种、汇率     [接口] IAuditable, IApprovable │
+ * ├──────────────────┬──────────────────┬──────────────────┬────────────────────┤
+ * │  [左侧] 销售线    │  [中间] 产品/库存 │  [右侧] 采购线    │  [最右] 拍卖系统   │
+ * │  客户 ← 联系人    │  产品 ← 分类      │  供应商 ← 联系人  │  委托人 → 合同     │
+ * │  ↓               │  ↓               │  ↓                │  ↓                │
+ * │  报价 → 订单      │  仓库 → 库存      │  询价 → 采购单    │  拍品 → 鉴定       │
+ * │  ↓               │  ↓               │  ↓                │  ↓                │
+ * │  发货             │  物流 → 运输      │  入库             │  拍卖会 → 场次     │
+ * │  ↓               │  ↓               │  ↓                │  ↓                │
+ * │  应收 → 收款      │  报关 / 发票      │  应付 → 付款      │  竞拍 → 成交       │
+ * └──────────────────┴──────────────────┴──────────────────┴────────────────────┘
  * 
  * 模块划分:
- * === 贸易 ERP 模块 ===
+ * === 企业管理模块 ===
  * 1. 基础数据 (部门、员工、币种)
  * 2. 客户管理 (客户、联系人)
  * 3. 供应商管理 (供应商、联系人)
@@ -15,7 +29,7 @@
  * 9. 物流管理 (物流公司、运输单)
  * 10. 外贸管理 (报关、汇率)
  * 
- * === 拍卖系统模块 ===
+ * === 拍卖业务模块 ===
  * 11. 委托管理 (委托人、委托合同)
  * 12. 拍品管理 (拍卖品、分类、鉴定)
  * 13. 拍卖活动 (拍卖会、场次、标的)
@@ -1056,65 +1070,82 @@ export const tradeErpActions: Action[] = [
 // Nodes Layout
 // ============================================
 export const tradeErpNodes: OntologyNode[] = [
-  // 第一行 - 基础数据
-  { id: IDS.DEPARTMENT, type: 'objectType', position: { x: 50, y: 50 }, data: tradeErpObjectTypes[0] },
-  { id: IDS.EMPLOYEE, type: 'objectType', position: { x: 300, y: 50 }, data: tradeErpObjectTypes[1] },
-  { id: IDS.CURRENCY, type: 'objectType', position: { x: 550, y: 50 }, data: tradeErpObjectTypes[2] },
-  // 第二行 - 客户/供应商
-  { id: IDS.CUSTOMER, type: 'objectType', position: { x: 50, y: 200 }, data: tradeErpObjectTypes[3] },
-  { id: IDS.CUSTOMER_CONTACT, type: 'objectType', position: { x: 50, y: 350 }, data: tradeErpObjectTypes[4] },
-  { id: IDS.SUPPLIER, type: 'objectType', position: { x: 1200, y: 200 }, data: tradeErpObjectTypes[5] },
-  { id: IDS.SUPPLIER_CONTACT, type: 'objectType', position: { x: 1200, y: 350 }, data: tradeErpObjectTypes[6] },
-  // 第三行 - 产品
-  { id: IDS.PRODUCT, type: 'objectType', position: { x: 625, y: 200 }, data: tradeErpObjectTypes[7] },
-  { id: IDS.PRODUCT_CATEGORY, type: 'objectType', position: { x: 625, y: 350 }, data: tradeErpObjectTypes[8] },
-  // 第四行 - 采购流程
-  { id: IDS.PURCHASE_INQUIRY, type: 'objectType', position: { x: 900, y: 200 }, data: tradeErpObjectTypes[9] },
-  { id: IDS.PURCHASE_ORDER, type: 'objectType', position: { x: 900, y: 350 }, data: tradeErpObjectTypes[10] },
-  { id: IDS.PURCHASE_RECEIPT, type: 'objectType', position: { x: 900, y: 500 }, data: tradeErpObjectTypes[11] },
-  // 第五行 - 销售流程
-  { id: IDS.SALES_QUOTATION, type: 'objectType', position: { x: 300, y: 200 }, data: tradeErpObjectTypes[12] },
-  { id: IDS.SALES_ORDER, type: 'objectType', position: { x: 300, y: 350 }, data: tradeErpObjectTypes[13] },
-  { id: IDS.SALES_SHIPMENT, type: 'objectType', position: { x: 300, y: 500 }, data: tradeErpObjectTypes[14] },
-  // 第六行 - 库存
-  { id: IDS.WAREHOUSE, type: 'objectType', position: { x: 625, y: 500 }, data: tradeErpObjectTypes[15] },
-  { id: IDS.INVENTORY, type: 'objectType', position: { x: 625, y: 650 }, data: tradeErpObjectTypes[16] },
-  // 第七行 - 财务
-  { id: IDS.RECEIVABLE, type: 'objectType', position: { x: 50, y: 500 }, data: tradeErpObjectTypes[17] },
-  { id: IDS.PAYABLE, type: 'objectType', position: { x: 1200, y: 500 }, data: tradeErpObjectTypes[18] },
-  { id: IDS.PAYMENT_RECEIPT, type: 'objectType', position: { x: 50, y: 650 }, data: tradeErpObjectTypes[19] },
-  { id: IDS.PAYMENT_VOUCHER, type: 'objectType', position: { x: 1200, y: 650 }, data: tradeErpObjectTypes[20] },
-  { id: IDS.INVOICE, type: 'objectType', position: { x: 625, y: 800 }, data: tradeErpObjectTypes[21] },
-  // 第八行 - 物流
-  { id: IDS.LOGISTICS_COMPANY, type: 'objectType', position: { x: 300, y: 650 }, data: tradeErpObjectTypes[22] },
-  { id: IDS.TRANSPORT_ORDER, type: 'objectType', position: { x: 300, y: 800 }, data: tradeErpObjectTypes[23] },
-  // 第九行 - 外贸
-  { id: IDS.CUSTOMS_DECLARATION, type: 'objectType', position: { x: 50, y: 800 }, data: tradeErpObjectTypes[24] },
-  { id: IDS.EXCHANGE_RATE, type: 'objectType', position: { x: 800, y: 50 }, data: tradeErpObjectTypes[25] },
-  // 接口
-  { id: IDS.AUDITABLE, type: 'interface', position: { x: 1050, y: 50 }, data: tradeErpInterfaces[0] },
-  { id: IDS.APPROVABLE, type: 'interface', position: { x: 1300, y: 50 }, data: tradeErpInterfaces[1] },
-  
-  // ========== 拍卖系统 Nodes (右侧区域 x: 1500+) ==========
-  // 委托管理
-  { id: IDS.CONSIGNOR, type: 'objectType', position: { x: 1500, y: 200 }, data: tradeErpObjectTypes[26] },
-  { id: IDS.CONSIGNMENT_CONTRACT, type: 'objectType', position: { x: 1500, y: 350 }, data: tradeErpObjectTypes[27] },
+  // ===============================================
+  // 顶部区域 (y: 0) - 基础数据 & 接口
+  // ===============================================
+  { id: IDS.DEPARTMENT, type: 'objectType', position: { x: 50, y: 0 }, data: tradeErpObjectTypes[0] },
+  { id: IDS.EMPLOYEE, type: 'objectType', position: { x: 280, y: 0 }, data: tradeErpObjectTypes[1] },
+  { id: IDS.CURRENCY, type: 'objectType', position: { x: 510, y: 0 }, data: tradeErpObjectTypes[2] },
+  { id: IDS.EXCHANGE_RATE, type: 'objectType', position: { x: 740, y: 0 }, data: tradeErpObjectTypes[25] },
+  { id: IDS.AUDITABLE, type: 'interface', position: { x: 1050, y: 0 }, data: tradeErpInterfaces[0] },
+  { id: IDS.APPROVABLE, type: 'interface', position: { x: 1280, y: 0 }, data: tradeErpInterfaces[1] },
+
+  // ===============================================
+  // 左侧区域 (x: 0-350) - 销售线：客户 → 销售 → 应收
+  // ===============================================
+  // 客户
+  { id: IDS.CUSTOMER, type: 'objectType', position: { x: 50, y: 180 }, data: tradeErpObjectTypes[3] },
+  { id: IDS.CUSTOMER_CONTACT, type: 'objectType', position: { x: 280, y: 180 }, data: tradeErpObjectTypes[4] },
+  // 销售流程
+  { id: IDS.SALES_QUOTATION, type: 'objectType', position: { x: 50, y: 340 }, data: tradeErpObjectTypes[12] },
+  { id: IDS.SALES_ORDER, type: 'objectType', position: { x: 280, y: 340 }, data: tradeErpObjectTypes[13] },
+  { id: IDS.SALES_SHIPMENT, type: 'objectType', position: { x: 50, y: 500 }, data: tradeErpObjectTypes[14] },
+  // 应收财务
+  { id: IDS.RECEIVABLE, type: 'objectType', position: { x: 50, y: 660 }, data: tradeErpObjectTypes[17] },
+  { id: IDS.PAYMENT_RECEIPT, type: 'objectType', position: { x: 280, y: 660 }, data: tradeErpObjectTypes[19] },
+
+  // ===============================================
+  // 中间区域 (x: 500-800) - 产品/库存/物流
+  // ===============================================
+  // 产品
+  { id: IDS.PRODUCT, type: 'objectType', position: { x: 550, y: 180 }, data: tradeErpObjectTypes[7] },
+  { id: IDS.PRODUCT_CATEGORY, type: 'objectType', position: { x: 780, y: 180 }, data: tradeErpObjectTypes[8] },
+  // 库存
+  { id: IDS.WAREHOUSE, type: 'objectType', position: { x: 550, y: 340 }, data: tradeErpObjectTypes[15] },
+  { id: IDS.INVENTORY, type: 'objectType', position: { x: 780, y: 340 }, data: tradeErpObjectTypes[16] },
+  // 物流
+  { id: IDS.LOGISTICS_COMPANY, type: 'objectType', position: { x: 550, y: 500 }, data: tradeErpObjectTypes[22] },
+  { id: IDS.TRANSPORT_ORDER, type: 'objectType', position: { x: 780, y: 500 }, data: tradeErpObjectTypes[23] },
+  // 外贸/发票
+  { id: IDS.CUSTOMS_DECLARATION, type: 'objectType', position: { x: 550, y: 660 }, data: tradeErpObjectTypes[24] },
+  { id: IDS.INVOICE, type: 'objectType', position: { x: 780, y: 660 }, data: tradeErpObjectTypes[21] },
+
+  // ===============================================
+  // 右侧区域 (x: 1050-1350) - 采购线：供应商 → 采购 → 应付
+  // ===============================================
+  // 供应商
+  { id: IDS.SUPPLIER, type: 'objectType', position: { x: 1050, y: 180 }, data: tradeErpObjectTypes[5] },
+  { id: IDS.SUPPLIER_CONTACT, type: 'objectType', position: { x: 1280, y: 180 }, data: tradeErpObjectTypes[6] },
+  // 采购流程
+  { id: IDS.PURCHASE_INQUIRY, type: 'objectType', position: { x: 1050, y: 340 }, data: tradeErpObjectTypes[9] },
+  { id: IDS.PURCHASE_ORDER, type: 'objectType', position: { x: 1280, y: 340 }, data: tradeErpObjectTypes[10] },
+  { id: IDS.PURCHASE_RECEIPT, type: 'objectType', position: { x: 1050, y: 500 }, data: tradeErpObjectTypes[11] },
+  // 应付财务
+  { id: IDS.PAYABLE, type: 'objectType', position: { x: 1050, y: 660 }, data: tradeErpObjectTypes[18] },
+  { id: IDS.PAYMENT_VOUCHER, type: 'objectType', position: { x: 1280, y: 660 }, data: tradeErpObjectTypes[20] },
+
+  // ===============================================
+  // 最右区域 (x: 1600+) - 拍卖系统
+  // ===============================================
+  // 委托管理 (拍卖起点)
+  { id: IDS.CONSIGNOR, type: 'objectType', position: { x: 1600, y: 180 }, data: tradeErpObjectTypes[26] },
+  { id: IDS.CONSIGNMENT_CONTRACT, type: 'objectType', position: { x: 1830, y: 180 }, data: tradeErpObjectTypes[27] },
   // 拍品管理
-  { id: IDS.AUCTION_ITEM, type: 'objectType', position: { x: 1750, y: 200 }, data: tradeErpObjectTypes[28] },
-  { id: IDS.AUCTION_CATEGORY, type: 'objectType', position: { x: 2000, y: 200 }, data: tradeErpObjectTypes[29] },
-  { id: IDS.APPRAISAL, type: 'objectType', position: { x: 1750, y: 350 }, data: tradeErpObjectTypes[30] },
+  { id: IDS.AUCTION_ITEM, type: 'objectType', position: { x: 2060, y: 180 }, data: tradeErpObjectTypes[28] },
+  { id: IDS.AUCTION_CATEGORY, type: 'objectType', position: { x: 2290, y: 180 }, data: tradeErpObjectTypes[29] },
+  { id: IDS.APPRAISAL, type: 'objectType', position: { x: 2060, y: 340 }, data: tradeErpObjectTypes[30] },
   // 拍卖活动
-  { id: IDS.AUCTION_EVENT, type: 'objectType', position: { x: 1500, y: 500 }, data: tradeErpObjectTypes[31] },
-  { id: IDS.AUCTION_SESSION, type: 'objectType', position: { x: 1750, y: 500 }, data: tradeErpObjectTypes[32] },
-  { id: IDS.AUCTION_LOT, type: 'objectType', position: { x: 2000, y: 500 }, data: tradeErpObjectTypes[33] },
+  { id: IDS.AUCTION_EVENT, type: 'objectType', position: { x: 1600, y: 340 }, data: tradeErpObjectTypes[31] },
+  { id: IDS.AUCTION_SESSION, type: 'objectType', position: { x: 1830, y: 340 }, data: tradeErpObjectTypes[32] },
+  { id: IDS.AUCTION_LOT, type: 'objectType', position: { x: 2060, y: 500 }, data: tradeErpObjectTypes[33] },
   // 竞拍管理
-  { id: IDS.BIDDER, type: 'objectType', position: { x: 1500, y: 650 }, data: tradeErpObjectTypes[34] },
-  { id: IDS.BID, type: 'objectType', position: { x: 1750, y: 650 }, data: tradeErpObjectTypes[35] },
-  { id: IDS.DEPOSIT, type: 'objectType', position: { x: 2000, y: 650 }, data: tradeErpObjectTypes[36] },
+  { id: IDS.BIDDER, type: 'objectType', position: { x: 1600, y: 500 }, data: tradeErpObjectTypes[34] },
+  { id: IDS.DEPOSIT, type: 'objectType', position: { x: 1830, y: 500 }, data: tradeErpObjectTypes[36] },
+  { id: IDS.BID, type: 'objectType', position: { x: 2290, y: 500 }, data: tradeErpObjectTypes[35] },
   // 成交结算
-  { id: IDS.AUCTION_RESULT, type: 'objectType', position: { x: 1500, y: 800 }, data: tradeErpObjectTypes[37] },
-  { id: IDS.SETTLEMENT, type: 'objectType', position: { x: 1750, y: 800 }, data: tradeErpObjectTypes[38] },
-  { id: IDS.COMMISSION, type: 'objectType', position: { x: 2000, y: 800 }, data: tradeErpObjectTypes[39] },
+  { id: IDS.AUCTION_RESULT, type: 'objectType', position: { x: 1600, y: 660 }, data: tradeErpObjectTypes[37] },
+  { id: IDS.SETTLEMENT, type: 'objectType', position: { x: 1830, y: 660 }, data: tradeErpObjectTypes[38] },
+  { id: IDS.COMMISSION, type: 'objectType', position: { x: 2060, y: 660 }, data: tradeErpObjectTypes[39] },
 ];
 
 // ============================================
@@ -1133,10 +1164,10 @@ export const tradeErpEdges: OntologyEdge[] = tradeErpLinkTypes.map((lt) => ({
 // Complete Ontology
 // ============================================
 export const tradeErpOntology: Ontology = {
-  id: 'trade-erp-auction-ontology',
-  name: '贸易公司ERP + 拍卖系统',
-  description: '一个完整的企业级本体模型，包含：\n【贸易ERP】客户管理、供应商管理、产品管理、采购管理、销售管理、库存管理、财务管理、物流管理、外贸管理\n【拍卖系统】委托管理、拍品管理、拍卖活动、竞拍管理、成交结算',
-  version: '2.0.0',
+  id: 'company-management-ontology',
+  name: '公司管理系统',
+  description: '一个完整的企业级本体模型，包含：\n【企业管理】客户管理、供应商管理、产品管理、采购管理、销售管理、库存管理、财务管理、物流管理、外贸管理\n【拍卖业务】委托管理、拍品管理、拍卖活动、竞拍管理、成交结算',
+  version: '2.1.0',
   objectTypes: tradeErpObjectTypes,
   linkTypes: tradeErpLinkTypes,
   interfaces: tradeErpInterfaces,
