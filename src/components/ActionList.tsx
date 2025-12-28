@@ -9,8 +9,14 @@ import {
 import { useOntologyStore } from '../store/ontologyStore';
 
 export default function ActionList() {
-  const { ontology, deleteAction } = useOntologyStore();
+  const { ontology, deleteAction, setSelectedAction, openPanel } = useOntologyStore();
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleEdit = (id: string) => {
+    setSelectedAction(id);
+    openPanel('edit', 'action');
+    setIsOpen(false);
+  };
 
   if (!ontology) return null;
 
@@ -96,8 +102,16 @@ export default function ActionList() {
                         </p>
                       </div>
                       <button
+                        onClick={() => handleEdit(action.id)}
+                        className="p-1.5 text-surface-500 hover:text-onto-400 hover:bg-onto-500/10 rounded transition-colors"
+                        title="编辑动作"
+                      >
+                        <PencilIcon className="w-4 h-4" />
+                      </button>
+                      <button
                         onClick={() => handleDelete(action.id)}
                         className="p-1.5 text-surface-500 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
+                        title="删除动作"
                       >
                         <TrashIcon className="w-4 h-4" />
                       </button>

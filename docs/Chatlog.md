@@ -115,3 +115,29 @@
 **状态标签：** ✅完成
 
 ---
+
+## 动作参数编辑器
+
+**时间戳：** 2025-12-29 00:32
+
+**对话标题：** 创建动作没有参数列表
+
+**用户需求：**
+创建动作没有参数列表
+
+**解决方案：**
+1. 创建 ParameterEditor 组件用于编辑动作参数
+2. 在 ActionPanel 中集成参数编辑器
+3. 添加 selectedActionId 到 store 状态
+4. 在 ActionList 中添加编辑按钮
+5. 支持动作的完整 CRUD 操作
+
+**代码改动：**
+- 新增 `src/components/ParameterEditor.tsx` - 参数编辑器组件
+- 修改 `src/components/Panel.tsx` - 更新 ActionPanel 添加参数编辑
+- 修改 `src/components/ActionList.tsx` - 添加编辑按钮
+- 修改 `src/store/ontologyStore.ts` - 添加 selectedActionId 状态
+
+**状态标签：** ✅完成
+
+---

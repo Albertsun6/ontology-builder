@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { XMarkIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useOntologyStore } from '../store/ontologyStore';
 import PropertyEditor from './PropertyEditor';
-import type { Property, ObjectType, Interface, LinkType, Action } from '../types/ontology';
+import ParameterEditor from './ParameterEditor';
+import type { Property, ObjectType, Interface, LinkType, Action, ActionParameter } from '../types/ontology';
 
 // Color options for objects
 const colorOptions = [
@@ -27,6 +28,7 @@ export default function Panel() {
     closePanel,
     selectedNodeId,
     selectedEdgeId,
+    selectedActionId,
     ontology,
     addObjectType,
     updateObjectType,
@@ -72,6 +74,7 @@ export default function Panel() {
           <ActionPanel 
             mode={panelMode!} 
             onClose={closePanel}
+            selectedId={selectedActionId}
           />
         )}
       </div>
@@ -517,29 +520,63 @@ function LinkTypePanel({
 // Action Panel
 function ActionPanel({ 
   mode, 
-  onClose 
+  onClose,
+  selectedId
 }: { 
   mode: 'create' | 'edit'; 
   onClose: () => void;
+  selectedId?: string | null;
 }) {
-  const { ontology, addAction } = useOntologyStore();
+  const { ontology, addAction, updateAction, deleteAction } = useOntologyStore();
   
-  const [name, setName] = useState('');
-  const [displayName, setDisplayName] = useState('');
-  const [description, setDescription] = useState('');
-  const [objectTypeId, setObjectTypeId] = useState('');
+  const existingAction = mode === 'edit' && selectedId 
+    ? ontology?.actions.find(a => a.id === selectedId) 
+    : null;
+
+  const [name, setName] = useState(existingAction?.name || '');
+  const [displayName, setDisplayName] = useState(existingAction?.displayName || '');
+  const [description, setDescription] = useState(existingAction?.description || '');
+  const [objectTypeId, setObjectTypeId] = useState(existingAction?.objectTypeId || '');
+  const [parameters, setParameters] = useState<ActionParameter[]>(existingAction?.parameters || []);
+
+  useEffect(() => {
+    if (existingAction) {
+      setName(existingAction.name);
+      setDisplayName(existingAction.displayName);
+      setDescription(existingAction.description || '');
+      setObjectTypeId(existingAction.objectTypeId);
+      setParameters(existingAction.parameters);
+    }
+  }, [existingAction]);
 
   const handleSave = () => {
     if (!name || !displayName || !objectTypeId) return;
 
-    addAction({ 
-      name, 
-      displayName, 
-      description, 
-      objectTypeId,
-      parameters: [],
-    });
+    if (mode === 'create') {
+      addAction({ 
+        name, 
+        displayName, 
+        description, 
+        objectTypeId,
+        parameters,
+      });
+    } else if (selectedId) {
+      updateAction(selectedId, {
+        name,
+        displayName,
+        description,
+        objectTypeId,
+        parameters,
+      });
+    }
     onClose();
+  };
+
+  const handleDelete = () => {
+    if (selectedId && confirm('确定要删除这个动作吗？')) {
+      deleteAction(selectedId);
+      onClose();
+    }
   };
 
   return (
@@ -597,10 +634,17 @@ function ActionPanel({
             </select>
           </div>
         </div>
+
+        {/* Parameter Editor */}
+        <ParameterEditor
+          parameters={parameters}
+          onChange={setParameters}
+        />
       </div>
 
       <PanelFooter 
         onSave={handleSave}
+        onDelete={mode === 'edit' ? handleDelete : undefined}
         saveDisabled={!name || !displayName || !objectTypeId}
       />
     </>

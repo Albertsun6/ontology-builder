@@ -23,6 +23,7 @@ interface OntologyState {
   // Selection state
   selectedNodeId: string | null;
   selectedEdgeId: string | null;
+  selectedActionId: string | null;
   
   // UI state
   isPanelOpen: boolean;
@@ -60,6 +61,7 @@ interface OntologyState {
   // Selection actions
   setSelectedNode: (id: string | null) => void;
   setSelectedEdge: (id: string | null) => void;
+  setSelectedAction: (id: string | null) => void;
   
   // Panel actions
   openPanel: (mode: 'create' | 'edit', type: 'objectType' | 'linkType' | 'interface' | 'action') => void;
@@ -338,6 +340,7 @@ export const useOntologyStore = create<OntologyState>()(
       edges: demoEdges,
       selectedNodeId: null,
       selectedEdgeId: null,
+      selectedActionId: null,
       isPanelOpen: false,
       panelMode: null,
       panelType: null,
@@ -657,7 +660,9 @@ export const useOntologyStore = create<OntologyState>()(
 
       setSelectedNode: (id) => set({ selectedNodeId: id, selectedEdgeId: null }),
       
-      setSelectedEdge: (id) => set({ selectedEdgeId: id, selectedNodeId: null }),
+      setSelectedEdge: (id) => set({ selectedEdgeId: id, selectedNodeId: null, selectedActionId: null }),
+      
+      setSelectedAction: (id) => set({ selectedActionId: id, selectedNodeId: null, selectedEdgeId: null }),
 
       openPanel: (mode, type) => set({ isPanelOpen: true, panelMode: mode, panelType: type }),
       
@@ -682,6 +687,7 @@ export const useOntologyStore = create<OntologyState>()(
             edges: data.edges || [],
             selectedNodeId: null,
             selectedEdgeId: null,
+            selectedActionId: null,
           });
         } catch (error) {
           console.error('Failed to import ontology:', error);
@@ -695,6 +701,7 @@ export const useOntologyStore = create<OntologyState>()(
           edges: demoEdges,
           selectedNodeId: null,
           selectedEdgeId: null,
+          selectedActionId: null,
           isPanelOpen: false,
           panelMode: null,
           panelType: null,
@@ -713,6 +720,7 @@ export const useOntologyStore = create<OntologyState>()(
             edges: demoEdges,
             selectedNodeId: null,
             selectedEdgeId: null,
+            selectedActionId: null,
             isPanelOpen: false,
             panelMode: null,
             panelType: null,
