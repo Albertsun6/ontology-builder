@@ -1,8 +1,9 @@
 /**
- * 贸易公司 ERP 系统 - 本体模型
- * Trade Company ERP Ontology Model
+ * 贸易公司 ERP + 拍卖系统 - 本体模型
+ * Trade Company ERP + Auction System Ontology Model
  * 
  * 模块划分:
+ * === 贸易 ERP 模块 ===
  * 1. 基础数据 (部门、员工、币种)
  * 2. 客户管理 (客户、联系人)
  * 3. 供应商管理 (供应商、联系人)
@@ -13,6 +14,13 @@
  * 8. 财务管理 (应收、应付、收付款)
  * 9. 物流管理 (物流公司、运输单)
  * 10. 外贸管理 (报关、汇率)
+ * 
+ * === 拍卖系统模块 ===
+ * 11. 委托管理 (委托人、委托合同)
+ * 12. 拍品管理 (拍卖品、分类、鉴定)
+ * 13. 拍卖活动 (拍卖会、场次、标的)
+ * 14. 竞拍管理 (竞拍人、出价、保证金)
+ * 15. 成交结算 (成交记录、结算单、佣金)
  */
 
 import type { Property, ObjectType, LinkType, Interface, Action, OntologyNode, OntologyEdge, Ontology } from '../types/ontology';
@@ -59,6 +67,28 @@ const IDS = {
   // 外贸
   CUSTOMS_DECLARATION: 'erp-customs-declaration',
   EXCHANGE_RATE: 'erp-exchange-rate',
+  
+  // ========== 拍卖系统 ==========
+  // 委托管理
+  CONSIGNOR: 'auc-consignor',
+  CONSIGNMENT_CONTRACT: 'auc-consignment-contract',
+  // 拍品管理
+  AUCTION_ITEM: 'auc-auction-item',
+  AUCTION_CATEGORY: 'auc-auction-category',
+  APPRAISAL: 'auc-appraisal',
+  // 拍卖活动
+  AUCTION_EVENT: 'auc-auction-event',
+  AUCTION_SESSION: 'auc-auction-session',
+  AUCTION_LOT: 'auc-auction-lot',
+  // 竞拍管理
+  BIDDER: 'auc-bidder',
+  BID: 'auc-bid',
+  DEPOSIT: 'auc-deposit',
+  // 成交结算
+  AUCTION_RESULT: 'auc-auction-result',
+  SETTLEMENT: 'auc-settlement',
+  COMMISSION: 'auc-commission',
+  
   // 接口
   AUDITABLE: 'erp-auditable',
   APPROVABLE: 'erp-approvable',
@@ -348,6 +378,180 @@ const approvableProps: Property[] = [
 ];
 
 // ============================================
+// 拍卖系统 - Properties Definitions
+// ============================================
+
+// 委托人属性
+const consignorProps: Property[] = [
+  { id: 'csgn-code', name: 'consignor_code', displayName: '委托人编码', type: 'string', required: true },
+  { id: 'csgn-name', name: 'name', displayName: '姓名/公司名', type: 'string', required: true },
+  { id: 'csgn-type', name: 'consignor_type', displayName: '委托人类型', type: 'string', required: true }, // 个人/机构
+  { id: 'csgn-id-type', name: 'id_type', displayName: '证件类型', type: 'string', required: true },
+  { id: 'csgn-id-no', name: 'id_number', displayName: '证件号码', type: 'string', required: true },
+  { id: 'csgn-phone', name: 'phone', displayName: '联系电话', type: 'string', required: true },
+  { id: 'csgn-email', name: 'email', displayName: '邮箱', type: 'string', required: false },
+  { id: 'csgn-address', name: 'address', displayName: '地址', type: 'string', required: false },
+  { id: 'csgn-bank', name: 'bank_account', displayName: '银行账户', type: 'string', required: false },
+  { id: 'csgn-status', name: 'status', displayName: '状态', type: 'string', required: true },
+];
+
+// 委托合同属性
+const consignmentContractProps: Property[] = [
+  { id: 'cc-no', name: 'contract_no', displayName: '合同编号', type: 'string', required: true },
+  { id: 'cc-sign-date', name: 'sign_date', displayName: '签约日期', type: 'date', required: true },
+  { id: 'cc-start', name: 'start_date', displayName: '委托开始日', type: 'date', required: true },
+  { id: 'cc-end', name: 'end_date', displayName: '委托结束日', type: 'date', required: true },
+  { id: 'cc-reserve', name: 'reserve_price', displayName: '保留价', type: 'number', required: false },
+  { id: 'cc-commission-rate', name: 'commission_rate', displayName: '佣金比例(%)', type: 'number', required: true },
+  { id: 'cc-insurance', name: 'insurance_rate', displayName: '保险费率(%)', type: 'number', required: false },
+  { id: 'cc-terms', name: 'terms', displayName: '合同条款', type: 'string', required: false },
+  { id: 'cc-status', name: 'status', displayName: '状态', type: 'string', required: true },
+];
+
+// 拍卖品属性
+const auctionItemProps: Property[] = [
+  { id: 'ai-code', name: 'item_code', displayName: '拍品编号', type: 'string', required: true },
+  { id: 'ai-name', name: 'name', displayName: '拍品名称', type: 'string', required: true },
+  { id: 'ai-desc', name: 'description', displayName: '拍品描述', type: 'string', required: true },
+  { id: 'ai-origin', name: 'origin', displayName: '来源/产地', type: 'string', required: false },
+  { id: 'ai-era', name: 'era', displayName: '年代', type: 'string', required: false },
+  { id: 'ai-material', name: 'material', displayName: '材质', type: 'string', required: false },
+  { id: 'ai-size', name: 'size', displayName: '尺寸', type: 'string', required: false },
+  { id: 'ai-weight', name: 'weight', displayName: '重量', type: 'string', required: false },
+  { id: 'ai-condition', name: 'condition', displayName: '品相', type: 'string', required: true },
+  { id: 'ai-provenance', name: 'provenance', displayName: '流传记录', type: 'string', required: false },
+  { id: 'ai-images', name: 'images', displayName: '图片', type: 'array', required: true },
+  { id: 'ai-status', name: 'status', displayName: '状态', type: 'string', required: true },
+];
+
+// 拍卖品分类属性
+const auctionCategoryProps: Property[] = [
+  { id: 'ac-code', name: 'category_code', displayName: '分类编码', type: 'string', required: true },
+  { id: 'ac-name', name: 'name', displayName: '分类名称', type: 'string', required: true },
+  { id: 'ac-parent', name: 'parent_id', displayName: '上级分类', type: 'reference', required: false },
+  { id: 'ac-desc', name: 'description', displayName: '分类描述', type: 'string', required: false },
+];
+
+// 鉴定记录属性
+const appraisalProps: Property[] = [
+  { id: 'apr-no', name: 'appraisal_no', displayName: '鉴定编号', type: 'string', required: true },
+  { id: 'apr-date', name: 'appraisal_date', displayName: '鉴定日期', type: 'date', required: true },
+  { id: 'apr-expert', name: 'expert_name', displayName: '鉴定专家', type: 'string', required: true },
+  { id: 'apr-result', name: 'result', displayName: '鉴定结论', type: 'string', required: true },
+  { id: 'apr-auth', name: 'authenticity', displayName: '真伪判定', type: 'string', required: true },
+  { id: 'apr-low', name: 'estimate_low', displayName: '估价下限', type: 'number', required: true },
+  { id: 'apr-high', name: 'estimate_high', displayName: '估价上限', type: 'number', required: true },
+  { id: 'apr-remark', name: 'remark', displayName: '鉴定备注', type: 'string', required: false },
+];
+
+// 拍卖会属性
+const auctionEventProps: Property[] = [
+  { id: 'ae-code', name: 'event_code', displayName: '拍卖会编号', type: 'string', required: true },
+  { id: 'ae-name', name: 'name', displayName: '拍卖会名称', type: 'string', required: true },
+  { id: 'ae-type', name: 'auction_type', displayName: '拍卖类型', type: 'string', required: true }, // 现场/网络/同步
+  { id: 'ae-start', name: 'start_date', displayName: '开始日期', type: 'date', required: true },
+  { id: 'ae-end', name: 'end_date', displayName: '结束日期', type: 'date', required: true },
+  { id: 'ae-venue', name: 'venue', displayName: '拍卖地点', type: 'string', required: false },
+  { id: 'ae-preview-start', name: 'preview_start', displayName: '预展开始', type: 'datetime', required: false },
+  { id: 'ae-preview-end', name: 'preview_end', displayName: '预展结束', type: 'datetime', required: false },
+  { id: 'ae-desc', name: 'description', displayName: '活动说明', type: 'string', required: false },
+  { id: 'ae-status', name: 'status', displayName: '状态', type: 'string', required: true },
+];
+
+// 拍卖场次属性
+const auctionSessionProps: Property[] = [
+  { id: 'as-code', name: 'session_code', displayName: '场次编号', type: 'string', required: true },
+  { id: 'as-name', name: 'name', displayName: '场次名称', type: 'string', required: true },
+  { id: 'as-seq', name: 'sequence', displayName: '场次顺序', type: 'number', required: true },
+  { id: 'as-start', name: 'start_time', displayName: '开始时间', type: 'datetime', required: true },
+  { id: 'as-auctioneer', name: 'auctioneer', displayName: '拍卖师', type: 'string', required: false },
+  { id: 'as-status', name: 'status', displayName: '状态', type: 'string', required: true },
+];
+
+// 拍卖标的属性
+const auctionLotProps: Property[] = [
+  { id: 'al-no', name: 'lot_no', displayName: '标的号', type: 'string', required: true },
+  { id: 'al-seq', name: 'sequence', displayName: '拍卖顺序', type: 'number', required: true },
+  { id: 'al-start-price', name: 'starting_price', displayName: '起拍价', type: 'number', required: true },
+  { id: 'al-reserve', name: 'reserve_price', displayName: '保留价', type: 'number', required: false },
+  { id: 'al-increment', name: 'bid_increment', displayName: '加价幅度', type: 'number', required: true },
+  { id: 'al-estimate-low', name: 'estimate_low', displayName: '估价下限', type: 'number', required: false },
+  { id: 'al-estimate-high', name: 'estimate_high', displayName: '估价上限', type: 'number', required: false },
+  { id: 'al-currency', name: 'currency', displayName: '币种', type: 'string', required: true },
+  { id: 'al-status', name: 'status', displayName: '状态', type: 'string', required: true },
+];
+
+// 竞拍人属性
+const bidderProps: Property[] = [
+  { id: 'bid-code', name: 'bidder_code', displayName: '竞拍号', type: 'string', required: true },
+  { id: 'bid-name', name: 'name', displayName: '姓名/公司名', type: 'string', required: true },
+  { id: 'bid-type', name: 'bidder_type', displayName: '竞拍人类型', type: 'string', required: true },
+  { id: 'bid-id-type', name: 'id_type', displayName: '证件类型', type: 'string', required: true },
+  { id: 'bid-id-no', name: 'id_number', displayName: '证件号码', type: 'string', required: true },
+  { id: 'bid-phone', name: 'phone', displayName: '联系电话', type: 'string', required: true },
+  { id: 'bid-email', name: 'email', displayName: '邮箱', type: 'string', required: false },
+  { id: 'bid-paddle', name: 'paddle_no', displayName: '号牌号', type: 'string', required: false },
+  { id: 'bid-credit', name: 'credit_limit', displayName: '授信额度', type: 'number', required: false },
+  { id: 'bid-status', name: 'status', displayName: '状态', type: 'string', required: true },
+];
+
+// 出价记录属性
+const bidRecordProps: Property[] = [
+  { id: 'br-no', name: 'bid_no', displayName: '出价编号', type: 'string', required: true },
+  { id: 'br-time', name: 'bid_time', displayName: '出价时间', type: 'datetime', required: true },
+  { id: 'br-amount', name: 'bid_amount', displayName: '出价金额', type: 'number', required: true },
+  { id: 'br-type', name: 'bid_type', displayName: '出价方式', type: 'string', required: true }, // 现场/电话/网络/书面
+  { id: 'br-valid', name: 'is_valid', displayName: '是否有效', type: 'boolean', required: true },
+  { id: 'br-highest', name: 'is_highest', displayName: '是否最高', type: 'boolean', required: true },
+];
+
+// 保证金属性
+const depositProps: Property[] = [
+  { id: 'dep-no', name: 'deposit_no', displayName: '保证金编号', type: 'string', required: true },
+  { id: 'dep-amount', name: 'amount', displayName: '保证金金额', type: 'number', required: true },
+  { id: 'dep-currency', name: 'currency', displayName: '币种', type: 'string', required: true },
+  { id: 'dep-pay-date', name: 'payment_date', displayName: '缴纳日期', type: 'date', required: true },
+  { id: 'dep-method', name: 'payment_method', displayName: '支付方式', type: 'string', required: true },
+  { id: 'dep-refund', name: 'refund_amount', displayName: '退还金额', type: 'number', required: false },
+  { id: 'dep-refund-date', name: 'refund_date', displayName: '退还日期', type: 'date', required: false },
+  { id: 'dep-status', name: 'status', displayName: '状态', type: 'string', required: true },
+];
+
+// 成交记录属性
+const auctionResultProps: Property[] = [
+  { id: 'ar-no', name: 'result_no', displayName: '成交编号', type: 'string', required: true },
+  { id: 'ar-hammer', name: 'hammer_price', displayName: '落槌价', type: 'number', required: true },
+  { id: 'ar-premium', name: 'buyer_premium', displayName: '买家佣金', type: 'number', required: true },
+  { id: 'ar-total', name: 'total_price', displayName: '成交总价', type: 'number', required: true },
+  { id: 'ar-currency', name: 'currency', displayName: '币种', type: 'string', required: true },
+  { id: 'ar-time', name: 'hammer_time', displayName: '落槌时间', type: 'datetime', required: true },
+  { id: 'ar-status', name: 'status', displayName: '状态', type: 'string', required: true }, // 成交/流拍/撤拍
+];
+
+// 结算单属性
+const settlementProps: Property[] = [
+  { id: 'stl-no', name: 'settlement_no', displayName: '结算单号', type: 'string', required: true },
+  { id: 'stl-type', name: 'settlement_type', displayName: '结算类型', type: 'string', required: true }, // 买家结算/卖家结算
+  { id: 'stl-amount', name: 'amount', displayName: '结算金额', type: 'number', required: true },
+  { id: 'stl-currency', name: 'currency', displayName: '币种', type: 'string', required: true },
+  { id: 'stl-due', name: 'due_date', displayName: '应付日期', type: 'date', required: true },
+  { id: 'stl-paid', name: 'paid_amount', displayName: '已付金额', type: 'number', required: true },
+  { id: 'stl-pay-date', name: 'payment_date', displayName: '付款日期', type: 'date', required: false },
+  { id: 'stl-status', name: 'status', displayName: '状态', type: 'string', required: true },
+];
+
+// 佣金属性
+const commissionProps: Property[] = [
+  { id: 'cms-no', name: 'commission_no', displayName: '佣金编号', type: 'string', required: true },
+  { id: 'cms-type', name: 'commission_type', displayName: '佣金类型', type: 'string', required: true }, // 买家佣金/卖家佣金
+  { id: 'cms-rate', name: 'rate', displayName: '佣金比例(%)', type: 'number', required: true },
+  { id: 'cms-base', name: 'base_amount', displayName: '计算基数', type: 'number', required: true },
+  { id: 'cms-amount', name: 'amount', displayName: '佣金金额', type: 'number', required: true },
+  { id: 'cms-currency', name: 'currency', displayName: '币种', type: 'string', required: true },
+  { id: 'cms-status', name: 'status', displayName: '状态', type: 'string', required: true },
+];
+
+// ============================================
 // Object Types
 // ============================================
 export const tradeErpObjectTypes: ObjectType[] = [
@@ -491,6 +695,83 @@ export const tradeErpObjectTypes: ObjectType[] = [
     icon: '📈', color: '#dc2626', primaryKey: 'er-from', properties: exchangeRateProps,
     createdAt: now(), updatedAt: now(),
   },
+  
+  // ========== 拍卖系统 Object Types ==========
+  // 委托管理
+  {
+    id: IDS.CONSIGNOR, name: 'consignor', displayName: '委托人', description: '拍品委托方',
+    icon: '🎭', color: '#7c3aed', primaryKey: 'csgn-code', properties: consignorProps, interfaces: ['IAuditable'],
+    createdAt: now(), updatedAt: now(),
+  },
+  {
+    id: IDS.CONSIGNMENT_CONTRACT, name: 'consignment_contract', displayName: '委托合同', description: '拍品委托合同',
+    icon: '📜', color: '#8b5cf6', primaryKey: 'cc-no', properties: consignmentContractProps, interfaces: ['IAuditable', 'IApprovable'],
+    createdAt: now(), updatedAt: now(),
+  },
+  // 拍品管理
+  {
+    id: IDS.AUCTION_ITEM, name: 'auction_item', displayName: '拍卖品', description: '待拍卖的物品',
+    icon: '🏺', color: '#c026d3', primaryKey: 'ai-code', properties: auctionItemProps, interfaces: ['IAuditable'],
+    createdAt: now(), updatedAt: now(),
+  },
+  {
+    id: IDS.AUCTION_CATEGORY, name: 'auction_category', displayName: '拍品分类', description: '拍卖品分类',
+    icon: '🏷️', color: '#d946ef', primaryKey: 'ac-code', properties: auctionCategoryProps,
+    createdAt: now(), updatedAt: now(),
+  },
+  {
+    id: IDS.APPRAISAL, name: 'appraisal', displayName: '鉴定记录', description: '拍品鉴定估价',
+    icon: '🔍', color: '#a855f7', primaryKey: 'apr-no', properties: appraisalProps, interfaces: ['IAuditable'],
+    createdAt: now(), updatedAt: now(),
+  },
+  // 拍卖活动
+  {
+    id: IDS.AUCTION_EVENT, name: 'auction_event', displayName: '拍卖会', description: '拍卖活动/专场',
+    icon: '🎪', color: '#0891b2', primaryKey: 'ae-code', properties: auctionEventProps, interfaces: ['IAuditable', 'IApprovable'],
+    createdAt: now(), updatedAt: now(),
+  },
+  {
+    id: IDS.AUCTION_SESSION, name: 'auction_session', displayName: '拍卖场次', description: '拍卖会具体场次',
+    icon: '🎬', color: '#0e7490', primaryKey: 'as-code', properties: auctionSessionProps, interfaces: ['IAuditable'],
+    createdAt: now(), updatedAt: now(),
+  },
+  {
+    id: IDS.AUCTION_LOT, name: 'auction_lot', displayName: '拍卖标的', description: '上拍的具体标的',
+    icon: '🔨', color: '#06b6d4', primaryKey: 'al-no', properties: auctionLotProps, interfaces: ['IAuditable'],
+    createdAt: now(), updatedAt: now(),
+  },
+  // 竞拍管理
+  {
+    id: IDS.BIDDER, name: 'bidder', displayName: '竞拍人', description: '参与竞拍的买家',
+    icon: '🙋', color: '#059669', primaryKey: 'bid-code', properties: bidderProps, interfaces: ['IAuditable'],
+    createdAt: now(), updatedAt: now(),
+  },
+  {
+    id: IDS.BID, name: 'bid', displayName: '出价记录', description: '竞价出价记录',
+    icon: '💹', color: '#10b981', primaryKey: 'br-no', properties: bidRecordProps,
+    createdAt: now(), updatedAt: now(),
+  },
+  {
+    id: IDS.DEPOSIT, name: 'deposit', displayName: '保证金', description: '竞拍保证金',
+    icon: '💎', color: '#34d399', primaryKey: 'dep-no', properties: depositProps, interfaces: ['IAuditable'],
+    createdAt: now(), updatedAt: now(),
+  },
+  // 成交结算
+  {
+    id: IDS.AUCTION_RESULT, name: 'auction_result', displayName: '成交记录', description: '拍卖成交结果',
+    icon: '🏆', color: '#f59e0b', primaryKey: 'ar-no', properties: auctionResultProps, interfaces: ['IAuditable'],
+    createdAt: now(), updatedAt: now(),
+  },
+  {
+    id: IDS.SETTLEMENT, name: 'settlement', displayName: '结算单', description: '拍卖结算单',
+    icon: '📑', color: '#d97706', primaryKey: 'stl-no', properties: settlementProps, interfaces: ['IAuditable', 'IApprovable'],
+    createdAt: now(), updatedAt: now(),
+  },
+  {
+    id: IDS.COMMISSION, name: 'commission', displayName: '佣金', description: '拍卖佣金记录',
+    icon: '💰', color: '#ea580c', primaryKey: 'cms-no', properties: commissionProps, interfaces: ['IAuditable'],
+    createdAt: now(), updatedAt: now(),
+  },
 ];
 
 // ============================================
@@ -550,6 +831,30 @@ export const tradeErpLinkTypes: LinkType[] = [
   // 报关关系
   { id: 'link-cd-so', name: 'customs_sales', displayName: '报关销售单', sourceObjectTypeId: IDS.CUSTOMS_DECLARATION, targetObjectTypeId: IDS.SALES_ORDER, cardinality: 'many-to-one', sourceRole: '来源订单', targetRole: '报关记录', createdAt: now(), updatedAt: now() },
   { id: 'link-cd-to', name: 'customs_transport', displayName: '报关运输单', sourceObjectTypeId: IDS.CUSTOMS_DECLARATION, targetObjectTypeId: IDS.TRANSPORT_ORDER, cardinality: 'many-to-one', sourceRole: '关联运输', targetRole: '报关记录', createdAt: now(), updatedAt: now() },
+  
+  // ========== 拍卖系统 Link Types ==========
+  // 委托关系
+  { id: 'link-contract-consignor', name: 'contract_consignor', displayName: '合同委托人', sourceObjectTypeId: IDS.CONSIGNMENT_CONTRACT, targetObjectTypeId: IDS.CONSIGNOR, cardinality: 'many-to-one', sourceRole: '委托人', targetRole: '委托合同', createdAt: now(), updatedAt: now() },
+  { id: 'link-item-contract', name: 'item_contract', displayName: '拍品合同', sourceObjectTypeId: IDS.AUCTION_ITEM, targetObjectTypeId: IDS.CONSIGNMENT_CONTRACT, cardinality: 'many-to-one', sourceRole: '委托合同', targetRole: '委托拍品', createdAt: now(), updatedAt: now() },
+  // 拍品关系
+  { id: 'link-item-category', name: 'item_category', displayName: '拍品分类', sourceObjectTypeId: IDS.AUCTION_ITEM, targetObjectTypeId: IDS.AUCTION_CATEGORY, cardinality: 'many-to-one', sourceRole: '所属分类', targetRole: '分类拍品', createdAt: now(), updatedAt: now() },
+  { id: 'link-appraisal-item', name: 'appraisal_item', displayName: '鉴定拍品', sourceObjectTypeId: IDS.APPRAISAL, targetObjectTypeId: IDS.AUCTION_ITEM, cardinality: 'many-to-one', sourceRole: '鉴定拍品', targetRole: '鉴定记录', createdAt: now(), updatedAt: now() },
+  // 拍卖活动关系
+  { id: 'link-session-event', name: 'session_event', displayName: '场次拍卖会', sourceObjectTypeId: IDS.AUCTION_SESSION, targetObjectTypeId: IDS.AUCTION_EVENT, cardinality: 'many-to-one', sourceRole: '所属拍卖会', targetRole: '拍卖场次', createdAt: now(), updatedAt: now() },
+  { id: 'link-lot-session', name: 'lot_session', displayName: '标的场次', sourceObjectTypeId: IDS.AUCTION_LOT, targetObjectTypeId: IDS.AUCTION_SESSION, cardinality: 'many-to-one', sourceRole: '所属场次', targetRole: '场次标的', createdAt: now(), updatedAt: now() },
+  { id: 'link-lot-item', name: 'lot_item', displayName: '标的拍品', sourceObjectTypeId: IDS.AUCTION_LOT, targetObjectTypeId: IDS.AUCTION_ITEM, cardinality: 'many-to-one', sourceRole: '拍卖拍品', targetRole: '上拍记录', createdAt: now(), updatedAt: now() },
+  // 竞拍关系
+  { id: 'link-deposit-bidder', name: 'deposit_bidder', displayName: '保证金竞拍人', sourceObjectTypeId: IDS.DEPOSIT, targetObjectTypeId: IDS.BIDDER, cardinality: 'many-to-one', sourceRole: '缴纳人', targetRole: '保证金', createdAt: now(), updatedAt: now() },
+  { id: 'link-deposit-event', name: 'deposit_event', displayName: '保证金拍卖会', sourceObjectTypeId: IDS.DEPOSIT, targetObjectTypeId: IDS.AUCTION_EVENT, cardinality: 'many-to-one', sourceRole: '参拍活动', targetRole: '保证金', createdAt: now(), updatedAt: now() },
+  { id: 'link-bid-lot', name: 'bid_lot', displayName: '出价标的', sourceObjectTypeId: IDS.BID, targetObjectTypeId: IDS.AUCTION_LOT, cardinality: 'many-to-one', sourceRole: '竞拍标的', targetRole: '出价记录', createdAt: now(), updatedAt: now() },
+  { id: 'link-bid-bidder', name: 'bid_bidder', displayName: '出价人', sourceObjectTypeId: IDS.BID, targetObjectTypeId: IDS.BIDDER, cardinality: 'many-to-one', sourceRole: '出价人', targetRole: '出价记录', createdAt: now(), updatedAt: now() },
+  // 成交结算关系
+  { id: 'link-result-lot', name: 'result_lot', displayName: '成交标的', sourceObjectTypeId: IDS.AUCTION_RESULT, targetObjectTypeId: IDS.AUCTION_LOT, cardinality: 'one-to-one', sourceRole: '成交标的', targetRole: '成交记录', createdAt: now(), updatedAt: now() },
+  { id: 'link-result-bidder', name: 'result_bidder', displayName: '成交买家', sourceObjectTypeId: IDS.AUCTION_RESULT, targetObjectTypeId: IDS.BIDDER, cardinality: 'many-to-one', sourceRole: '买受人', targetRole: '成交记录', createdAt: now(), updatedAt: now() },
+  { id: 'link-settlement-result', name: 'settlement_result', displayName: '结算成交', sourceObjectTypeId: IDS.SETTLEMENT, targetObjectTypeId: IDS.AUCTION_RESULT, cardinality: 'many-to-one', sourceRole: '成交记录', targetRole: '结算单', createdAt: now(), updatedAt: now() },
+  { id: 'link-settlement-bidder', name: 'settlement_bidder', displayName: '结算买家', sourceObjectTypeId: IDS.SETTLEMENT, targetObjectTypeId: IDS.BIDDER, cardinality: 'many-to-one', sourceRole: '结算方', targetRole: '结算单', createdAt: now(), updatedAt: now() },
+  { id: 'link-settlement-consignor', name: 'settlement_consignor', displayName: '结算委托人', sourceObjectTypeId: IDS.SETTLEMENT, targetObjectTypeId: IDS.CONSIGNOR, cardinality: 'many-to-one', sourceRole: '结算方', targetRole: '结算单', createdAt: now(), updatedAt: now() },
+  { id: 'link-commission-result', name: 'commission_result', displayName: '佣金成交', sourceObjectTypeId: IDS.COMMISSION, targetObjectTypeId: IDS.AUCTION_RESULT, cardinality: 'many-to-one', sourceRole: '关联成交', targetRole: '佣金记录', createdAt: now(), updatedAt: now() },
 ];
 
 // ============================================
@@ -639,6 +944,112 @@ export const tradeErpActions: Action[] = [
     ],
     createdAt: now(), updatedAt: now(),
   },
+  
+  // ========== 拍卖系统 Actions ==========
+  // 委托征集
+  {
+    id: 'action-create-consignment', name: 'create_consignment', displayName: '征集拍品', description: '创建委托合同并登记拍品',
+    objectTypeId: IDS.CONSIGNOR, parameters: [
+      { id: 'p-item-name', name: 'item_name', type: 'string', required: true, description: '拍品名称' },
+      { id: 'p-item-desc', name: 'description', type: 'string', required: true, description: '拍品描述' },
+      { id: 'p-reserve', name: 'reserve_price', type: 'number', required: false, description: '保留价' },
+      { id: 'p-commission', name: 'commission_rate', type: 'number', required: true, description: '佣金比例' },
+    ],
+    rules: [
+      { id: 'r-csg-1', type: 'validation', name: '验证委托人状态', enabled: true, order: 0, config: { type: 'validation', condition: 'source.status === "active"', errorMessage: '委托人状态无效' } },
+      { id: 'r-csg-2', type: 'create_object', name: '创建委托合同', enabled: true, order: 1, config: { type: 'create_object', targetObjectTypeId: IDS.CONSIGNMENT_CONTRACT, propertyMappings: [{ targetProperty: 'reserve_price', sourceType: 'parameter', sourceValue: 'reserve_price' }, { targetProperty: 'commission_rate', sourceType: 'parameter', sourceValue: 'commission_rate' }, { targetProperty: 'status', sourceType: 'constant', sourceValue: 'draft' }] } },
+      { id: 'r-csg-3', type: 'create_object', name: '创建拍品', enabled: true, order: 2, config: { type: 'create_object', targetObjectTypeId: IDS.AUCTION_ITEM, propertyMappings: [{ targetProperty: 'name', sourceType: 'parameter', sourceValue: 'item_name' }, { targetProperty: 'description', sourceType: 'parameter', sourceValue: 'description' }, { targetProperty: 'status', sourceType: 'constant', sourceValue: 'pending' }] } },
+    ],
+    createdAt: now(), updatedAt: now(),
+  },
+  // 拍品鉴定
+  {
+    id: 'action-appraise-item', name: 'appraise_item', displayName: '鉴定估价', description: '对拍品进行鉴定估价',
+    objectTypeId: IDS.AUCTION_ITEM, parameters: [
+      { id: 'p-expert', name: 'expert_name', type: 'string', required: true, description: '鉴定专家' },
+      { id: 'p-auth', name: 'authenticity', type: 'string', required: true, description: '真伪判定' },
+      { id: 'p-low', name: 'estimate_low', type: 'number', required: true, description: '估价下限' },
+      { id: 'p-high', name: 'estimate_high', type: 'number', required: true, description: '估价上限' },
+    ],
+    rules: [
+      { id: 'r-apr-1', type: 'create_object', name: '创建鉴定记录', enabled: true, order: 0, config: { type: 'create_object', targetObjectTypeId: IDS.APPRAISAL, propertyMappings: [{ targetProperty: 'expert_name', sourceType: 'parameter', sourceValue: 'expert_name' }, { targetProperty: 'authenticity', sourceType: 'parameter', sourceValue: 'authenticity' }, { targetProperty: 'estimate_low', sourceType: 'parameter', sourceValue: 'estimate_low' }, { targetProperty: 'estimate_high', sourceType: 'parameter', sourceValue: 'estimate_high' }] } },
+      { id: 'r-apr-2', type: 'update_property', name: '更新拍品状态', enabled: true, order: 1, config: { type: 'update_property', targetProperty: 'status', valueSource: 'constant', value: 'appraised' } },
+    ],
+    createdAt: now(), updatedAt: now(),
+  },
+  // 上拍
+  {
+    id: 'action-create-lot', name: 'create_lot', displayName: '上拍', description: '将拍品安排到拍卖场次',
+    objectTypeId: IDS.AUCTION_ITEM, parameters: [
+      { id: 'p-session', name: 'session_id', type: 'reference', required: true, description: '拍卖场次' },
+      { id: 'p-start-price', name: 'starting_price', type: 'number', required: true, description: '起拍价' },
+      { id: 'p-increment', name: 'bid_increment', type: 'number', required: true, description: '加价幅度' },
+    ],
+    rules: [
+      { id: 'r-lot-1', type: 'validation', name: '验证拍品已鉴定', enabled: true, order: 0, config: { type: 'validation', condition: 'source.status === "appraised"', errorMessage: '拍品必须先完成鉴定' } },
+      { id: 'r-lot-2', type: 'create_object', name: '创建拍卖标的', enabled: true, order: 1, config: { type: 'create_object', targetObjectTypeId: IDS.AUCTION_LOT, propertyMappings: [{ targetProperty: 'starting_price', sourceType: 'parameter', sourceValue: 'starting_price' }, { targetProperty: 'bid_increment', sourceType: 'parameter', sourceValue: 'bid_increment' }, { targetProperty: 'status', sourceType: 'constant', sourceValue: 'pending' }] } },
+      { id: 'r-lot-3', type: 'update_property', name: '更新拍品状态', enabled: true, order: 2, config: { type: 'update_property', targetProperty: 'status', valueSource: 'constant', value: 'listed' } },
+    ],
+    createdAt: now(), updatedAt: now(),
+  },
+  // 竞拍人登记
+  {
+    id: 'action-register-bidder', name: 'register_bidder', displayName: '竞拍登记', description: '竞拍人缴纳保证金参与拍卖',
+    objectTypeId: IDS.BIDDER, parameters: [
+      { id: 'p-event', name: 'event_id', type: 'reference', required: true, description: '参与的拍卖会' },
+      { id: 'p-deposit', name: 'deposit_amount', type: 'number', required: true, description: '保证金金额' },
+    ],
+    rules: [
+      { id: 'r-reg-1', type: 'validation', name: '验证竞拍人状态', enabled: true, order: 0, config: { type: 'validation', condition: 'source.status === "active"', errorMessage: '竞拍人状态无效' } },
+      { id: 'r-reg-2', type: 'create_object', name: '创建保证金记录', enabled: true, order: 1, config: { type: 'create_object', targetObjectTypeId: IDS.DEPOSIT, propertyMappings: [{ targetProperty: 'amount', sourceType: 'parameter', sourceValue: 'deposit_amount' }, { targetProperty: 'status', sourceType: 'constant', sourceValue: 'paid' }] } },
+      { id: 'r-reg-3', type: 'notification', name: '发送号牌通知', enabled: true, order: 2, config: { type: 'notification', channel: 'sms', recipientSource: 'property', recipient: 'phone', messageTemplate: '您已成功登记参拍，号牌号：{{source.paddle_no}}' } },
+    ],
+    createdAt: now(), updatedAt: now(),
+  },
+  // 出价
+  {
+    id: 'action-place-bid', name: 'place_bid', displayName: '出价', description: '竞拍人出价竞拍',
+    objectTypeId: IDS.AUCTION_LOT, parameters: [
+      { id: 'p-bidder', name: 'bidder_id', type: 'reference', required: true, description: '竞拍人' },
+      { id: 'p-amount', name: 'bid_amount', type: 'number', required: true, description: '出价金额' },
+      { id: 'p-type', name: 'bid_type', type: 'string', required: true, description: '出价方式' },
+    ],
+    rules: [
+      { id: 'r-bid-1', type: 'validation', name: '验证出价金额', enabled: true, order: 0, config: { type: 'validation', condition: 'params.bid_amount >= source.starting_price', errorMessage: '出价不得低于起拍价' } },
+      { id: 'r-bid-2', type: 'create_object', name: '创建出价记录', enabled: true, order: 1, config: { type: 'create_object', targetObjectTypeId: IDS.BID, propertyMappings: [{ targetProperty: 'bid_amount', sourceType: 'parameter', sourceValue: 'bid_amount' }, { targetProperty: 'bid_type', sourceType: 'parameter', sourceValue: 'bid_type' }, { targetProperty: 'is_valid', sourceType: 'constant', sourceValue: 'true' }, { targetProperty: 'is_highest', sourceType: 'constant', sourceValue: 'true' }] } },
+      { id: 'r-bid-3', type: 'webhook', name: '实时推送最高价', enabled: true, order: 2, config: { type: 'webhook', url: '/api/auction/broadcast', method: 'POST', bodyTemplate: '{"lot_id": "{{source.id}}", "highest_bid": {{params.bid_amount}}}' } },
+    ],
+    createdAt: now(), updatedAt: now(),
+  },
+  // 落槌成交
+  {
+    id: 'action-hammer-down', name: 'hammer_down', displayName: '落槌成交', description: '标的成交落槌',
+    objectTypeId: IDS.AUCTION_LOT, parameters: [
+      { id: 'p-hammer', name: 'hammer_price', type: 'number', required: true, description: '落槌价' },
+      { id: 'p-winner', name: 'winner_id', type: 'reference', required: true, description: '买受人' },
+    ],
+    rules: [
+      { id: 'r-hm-1', type: 'validation', name: '验证标的状态', enabled: true, order: 0, config: { type: 'validation', condition: 'source.status === "bidding"', errorMessage: '标的不在竞拍中' } },
+      { id: 'r-hm-2', type: 'create_object', name: '创建成交记录', enabled: true, order: 1, config: { type: 'create_object', targetObjectTypeId: IDS.AUCTION_RESULT, propertyMappings: [{ targetProperty: 'hammer_price', sourceType: 'parameter', sourceValue: 'hammer_price' }, { targetProperty: 'status', sourceType: 'constant', sourceValue: 'sold' }] } },
+      { id: 'r-hm-3', type: 'update_property', name: '更新标的状态', enabled: true, order: 2, config: { type: 'update_property', targetProperty: 'status', valueSource: 'constant', value: 'sold' } },
+      { id: 'r-hm-4', type: 'notification', name: '通知买家', enabled: true, order: 3, config: { type: 'notification', channel: 'email', recipientSource: 'parameter', recipient: 'winner_id.email', messageTemplate: '恭喜您成功竞得拍品！落槌价：{{params.hammer_price}}' } },
+    ],
+    createdAt: now(), updatedAt: now(),
+  },
+  // 生成结算单
+  {
+    id: 'action-create-settlement', name: 'create_settlement', displayName: '生成结算单', description: '根据成交记录生成买家结算单',
+    objectTypeId: IDS.AUCTION_RESULT, parameters: [
+      { id: 'p-premium-rate', name: 'premium_rate', type: 'number', required: true, description: '买家佣金比例' },
+    ],
+    rules: [
+      { id: 'r-stl-1', type: 'validation', name: '验证成交状态', enabled: true, order: 0, config: { type: 'validation', condition: 'source.status === "sold"', errorMessage: '非成交状态无法结算' } },
+      { id: 'r-stl-2', type: 'create_object', name: '创建买家结算单', enabled: true, order: 1, config: { type: 'create_object', targetObjectTypeId: IDS.SETTLEMENT, propertyMappings: [{ targetProperty: 'settlement_type', sourceType: 'constant', sourceValue: 'buyer' }, { targetProperty: 'status', sourceType: 'constant', sourceValue: 'pending' }] } },
+      { id: 'r-stl-3', type: 'create_object', name: '创建佣金记录', enabled: true, order: 2, config: { type: 'create_object', targetObjectTypeId: IDS.COMMISSION, propertyMappings: [{ targetProperty: 'commission_type', sourceType: 'constant', sourceValue: 'buyer' }, { targetProperty: 'rate', sourceType: 'parameter', sourceValue: 'premium_rate' }, { targetProperty: 'status', sourceType: 'constant', sourceValue: 'pending' }] } },
+      { id: 'r-stl-4', type: 'update_property', name: '更新成交状态', enabled: true, order: 3, config: { type: 'update_property', targetProperty: 'status', valueSource: 'constant', value: 'settling' } },
+    ],
+    createdAt: now(), updatedAt: now(),
+  },
 ];
 
 // ============================================
@@ -683,6 +1094,27 @@ export const tradeErpNodes: OntologyNode[] = [
   // 接口
   { id: IDS.AUDITABLE, type: 'interface', position: { x: 1050, y: 50 }, data: tradeErpInterfaces[0] },
   { id: IDS.APPROVABLE, type: 'interface', position: { x: 1300, y: 50 }, data: tradeErpInterfaces[1] },
+  
+  // ========== 拍卖系统 Nodes (右侧区域 x: 1500+) ==========
+  // 委托管理
+  { id: IDS.CONSIGNOR, type: 'objectType', position: { x: 1500, y: 200 }, data: tradeErpObjectTypes[26] },
+  { id: IDS.CONSIGNMENT_CONTRACT, type: 'objectType', position: { x: 1500, y: 350 }, data: tradeErpObjectTypes[27] },
+  // 拍品管理
+  { id: IDS.AUCTION_ITEM, type: 'objectType', position: { x: 1750, y: 200 }, data: tradeErpObjectTypes[28] },
+  { id: IDS.AUCTION_CATEGORY, type: 'objectType', position: { x: 2000, y: 200 }, data: tradeErpObjectTypes[29] },
+  { id: IDS.APPRAISAL, type: 'objectType', position: { x: 1750, y: 350 }, data: tradeErpObjectTypes[30] },
+  // 拍卖活动
+  { id: IDS.AUCTION_EVENT, type: 'objectType', position: { x: 1500, y: 500 }, data: tradeErpObjectTypes[31] },
+  { id: IDS.AUCTION_SESSION, type: 'objectType', position: { x: 1750, y: 500 }, data: tradeErpObjectTypes[32] },
+  { id: IDS.AUCTION_LOT, type: 'objectType', position: { x: 2000, y: 500 }, data: tradeErpObjectTypes[33] },
+  // 竞拍管理
+  { id: IDS.BIDDER, type: 'objectType', position: { x: 1500, y: 650 }, data: tradeErpObjectTypes[34] },
+  { id: IDS.BID, type: 'objectType', position: { x: 1750, y: 650 }, data: tradeErpObjectTypes[35] },
+  { id: IDS.DEPOSIT, type: 'objectType', position: { x: 2000, y: 650 }, data: tradeErpObjectTypes[36] },
+  // 成交结算
+  { id: IDS.AUCTION_RESULT, type: 'objectType', position: { x: 1500, y: 800 }, data: tradeErpObjectTypes[37] },
+  { id: IDS.SETTLEMENT, type: 'objectType', position: { x: 1750, y: 800 }, data: tradeErpObjectTypes[38] },
+  { id: IDS.COMMISSION, type: 'objectType', position: { x: 2000, y: 800 }, data: tradeErpObjectTypes[39] },
 ];
 
 // ============================================
@@ -701,10 +1133,10 @@ export const tradeErpEdges: OntologyEdge[] = tradeErpLinkTypes.map((lt) => ({
 // Complete Ontology
 // ============================================
 export const tradeErpOntology: Ontology = {
-  id: 'trade-erp-ontology',
-  name: '贸易公司ERP系统',
-  description: '一个完整的贸易公司ERP系统本体模型，涵盖客户管理、供应商管理、产品管理、采购管理、销售管理、库存管理、财务管理、物流管理和外贸管理等核心业务模块',
-  version: '1.0.0',
+  id: 'trade-erp-auction-ontology',
+  name: '贸易公司ERP + 拍卖系统',
+  description: '一个完整的企业级本体模型，包含：\n【贸易ERP】客户管理、供应商管理、产品管理、采购管理、销售管理、库存管理、财务管理、物流管理、外贸管理\n【拍卖系统】委托管理、拍品管理、拍卖活动、竞拍管理、成交结算',
+  version: '2.0.0',
   objectTypes: tradeErpObjectTypes,
   linkTypes: tradeErpLinkTypes,
   interfaces: tradeErpInterfaces,
